@@ -1,4 +1,6 @@
 import React , { Component } from 'react';
+import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import "./Box.css"
 
 class LoginBox extends Component {
     constructor(props) {
@@ -13,21 +15,21 @@ class LoginBox extends Component {
 
     render() {
         return (
-            <div>
-                <div>Login</div>
-                <div>
-                    <div>
-                        <label htmlFor="username">Username</label>
-                        <input type="text" name="username" placeholder="Username" />
-                    </div>
+            <div className="pr-4 pl-4 pb-3">
+                <div className="Box-title p-3 text-muted">Login</div>
+                <Form>
+                    <FormGroup>
+                        <Label htmlFor="username">Username</Label>
+                        <Input type="text" name="username" placeholder="Username" />
+                    </FormGroup>
                     
-                    <div>
-                        <label htmlFor="password">Password</label>
-                        <input type="password" name="password" placeholder="Password" />
-                    </div>
+                    <FormGroup>
+                        <Label htmlFor="password">Password</Label>
+                        <Input type="password" name="password" placeholder="Password" />
+                    </FormGroup>
                     
-                    <button onClick={this.submitLogin.bind(this)}>Login</button>
-                </div>
+                    <Button color="danger" onClick={this.submitLogin.bind(this)}>Login</Button>
+                </Form>
             </div>
         )
     }

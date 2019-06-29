@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import LoginBox from '../../components/Auth/LoginBox';
-import RegisterBox from '../../components/Auth/Register';
+import RegisterBox from '../../components/Auth/RegisterBox';
 
+import {Container, Col, Row} from "reactstrap"
+import "./Auth.css"
 
 class Auth extends Component {
     constructor(props) {
@@ -23,20 +25,26 @@ class Auth extends Component {
 
     render() {
         return (
-            <div>
-                <div>
-                    <div onClick={this.showLoginBox.bind(this)}>
+            <Container>
+                <Col sm="4" className="m-auto shadow-lg">
+                <Row className="d-flex flex-row justify-content-center mt-3 mb-4">
+                    <div 
+                    className={"text-muted p-2 Auth-controller flex-grow-1 text-center border-bottom " + (this.state.isLoginOpen ? "border-danger" : "")} 
+                    onClick={this.showLoginBox.bind(this)}>
                         Login
                     </div>
-                    <div onClick={this.showRegisterBox.bind(this)}>
+                    <div 
+                    className={"text-muted p-2 Auth-controller flex-grow-1 text-center border-bottom " + (this.state.isRegisterOpen ? "border-danger" : "")} 
+                    onClick={this.showRegisterBox.bind(this)}>
                         Register
                     </div>
-                </div>
+                </Row>
                 <div>
                     {this.state.isLoginOpen && <LoginBox />}
                     {this.state.isRegisterOpen && <RegisterBox />}
                 </div>
-            </div>
+                </Col>
+            </Container>
         )
     }
 }
