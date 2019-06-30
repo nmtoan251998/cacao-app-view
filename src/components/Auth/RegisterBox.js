@@ -16,40 +16,40 @@ class RegisterBox extends Component {
             errors: [] }
     }
 
-    // showValidationErr(elm, msg) {
-    //     this.setState((prevState) => ({errors: [...prevState.errors, {elm, msg}], }));
-    // } 
+    showValidationErr(elm, msg) {
+        this.setState((prevState) => ({errors: [...prevState.errors, {elm, msg}], }));
+    } 
 
-    // clearValidationErr(elm) {
-    //     this.setState((prevState) => {
-    //         let newArr = [];
-    //         for(let err in prevState.errors) {
-    //             if(elm !== prevState.errors[err].elm) {
-    //                 newArr.push(prevState.errors[err])
-    //             }    
-    //         }
-    //         return {errors: newArr};
-    //     })
-    // }
+    clearValidationErr(elm) {
+        this.setState((prevState) => {
+            let newArr = [];
+            for(let err in prevState.errors) {
+                if(elm !== prevState.errors[err].elm) {
+                    newArr.push(prevState.errors[err])
+                }    
+            }
+            return {errors: newArr};
+        })
+    }
 
     onUserChange(e) {
         this.setState({ username: e.target.value });
-        // this.clearValidationErr("username");
+        this.clearValidationErr("username");
     }
 
     onAccountChange(e) {
         this.setState({ accountname: e.target.value });
-        // this.clearValidationErr("accountname");
+        this.clearValidationErr("accountname");
     }
 
     onPasswordChange(e) {
         this.setState({ password: e.target.value });
-        // this.clearValidationErr("password");
+        this.clearValidationErr("password");
     }
 
     onPassword2Change(e) {
         this.setState({ password2: e.target.value });
-        // this.clearValidationErr("password2");
+        this.clearValidationErr("password2");
     }
 
     submitRegister(e) {
@@ -64,19 +64,19 @@ class RegisterBox extends Component {
         .then(() => console.log("user was post......"))
         .catch((err) => console.log(err))
 
-        // if(this.state.username === "") {
-        //     this.showValidationErr("username", "username much be required!");
-        // } 
-        // if(this.state.accountname === "") {
-        //     this.showValidationErr("accountname", "account much be required!")
-        // } 
-        // if(this.state.password.length < 8 || this.state.password.length > 12) {
-        //     this.showValidationErr("password", "password much have 8 to 12 words!")
-        // }
+        if(this.state.username === "") {
+            this.showValidationErr("username", "username much be required!");
+        } 
+        if(this.state.accountname === "") {
+            this.showValidationErr("accountname", "account much be required!")
+        } 
+        if(this.state.password.length < 8 || this.state.password.length > 12) {
+            this.showValidationErr("password", "password much have 8 to 12 words!")
+        }
          
-        // if(this.state.password2 !== this.state.password) {
-        //     this.showValidationErr("password2", "password is incorrect!")
-        // }
+        if(this.state.password2 !== this.state.password) {
+            this.showValidationErr("password2", "password is incorrect!")
+        }
 
         console.log(userRegister)
     }
