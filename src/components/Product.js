@@ -1,15 +1,14 @@
 import React from 'react';
-
+import PropTypes from 'prop-types';
 import {
-    Col, Card, CardImg, CardBody,
-    CardTitle, CardSubtitle
+  Col, Card, CardImg, CardBody,
+  CardTitle, CardSubtitle,
 } from 'reactstrap';
 
-export default function Item(props) {
-    let { Item } = props;
-    console.log(props);
+export default function Product(props) {
+  const { Item } = props;
 
-    return (
+  return (
         <Col sm="4" md="2" xs="6" className="px-1 my-1">
             <Card>
                 <div className="position-relative">
@@ -27,5 +26,14 @@ export default function Item(props) {
                 </CardBody>
             </Card>
         </Col>
-    )
+  );
 }
+
+Product.propTypes = {
+  Item: PropTypes.shape({
+    product_id: PropTypes.string.isRequired,
+    product_image: PropTypes.string.isRequired,
+    product_name: PropTypes.string.isRequired,
+    price: PropTypes.string,
+  }),
+};
