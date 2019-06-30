@@ -1,16 +1,18 @@
 import React , { Component } from 'react';
 import {Container, Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import { BrowserRouter as Redirect } from 'react-router-dom'
 import Axios from "axios";
 import "./Box.css"
 
 class LoginBox extends Component {
     constructor(props) {
         super(props);
-
+        let isLogedIn = false
         this.state = {
             accountname: "",
             password: "",
-            errors: []
+            errors: [],
+            isLogedIn
         }
     }
 
@@ -55,9 +57,11 @@ class LoginBox extends Component {
         }
 
         Axios.post("http://localhost:5000/auth/login", userLogin)
-        .then(() => {
-            console.log("login...");
-            this.props.history.push("/")
+        .then((res) => {
+            localStorage.setItem("token", res.data.token)
+            this.setState({
+                isLogedIn: true
+            })
         })
         .catch(() => this.showValidationErr("accountname", "wrong account or password!"))
         
@@ -70,6 +74,9 @@ class LoginBox extends Component {
     }
 
     render() {
+        if(this.state.isLogedIn) {
+            return <Redirect to="/"/>
+        }
         let accountnameErr, passwordErr;
 
         for(let err in this.state.errors) {
