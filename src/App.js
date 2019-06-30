@@ -1,11 +1,15 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+
+import ListProducts from './components/ListProducts';
+
+import "bootstrap/dist/css/bootstrap.min.css";
+
 
 function App() {
   return (
     <div className="App">
-      Hello Cacao Application
+    <ListProducts />
     </div>
   );
 }
