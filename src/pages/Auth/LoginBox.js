@@ -9,8 +9,25 @@ class LoginBox extends Component {
 
         this.state = {
             accountname: "",
-            password: ""
+            password: "",
+            errors: []
         }
+    }
+
+    showValidationErr(elm, msg) {
+        this.setState((prevState) => ({errors: [...prevState.errors, {elm, msg}], }));
+    } 
+
+    clearValidationErr(elm) {
+        this.setState((prevState) => {
+            let newArr = [];
+            for(let err in prevState.errors) {
+                if(elm !== prevState.errors[err].elm) {
+                    newArr.push(prevState.errors[err])
+                }    
+            }
+            return {errors: newArr};
+        })
     }
 
     goToRegister(e) {
@@ -18,11 +35,17 @@ class LoginBox extends Component {
     }
 
     onAccountChange(e) {
-        this.setState({ accountname: e.target.value })
+        this.setState({ accountname: e.target.value });
+        this.clearValidationErr("accountname");
     }
 
     onPasswordChange(e) {
-        this.setState({ password: e.target.value })
+        this.setState({ password: e.target.value });
+        this.clearValidationErr("password");
+    }
+
+    showValidationErr(elm, msg) {
+        this.setState((prevState) => ({errors: [...prevState.errors, {elm, msg}], }));
     }
 
     submitLogin(event) {
@@ -36,11 +59,27 @@ class LoginBox extends Component {
             console.log("login...");
             this.props.history.push("/")
         })
-        .catch(err => console.log(err))
-
+        .catch(() => this.showValidationErr("accountname", "wrong account or password!"))
+        
+        if(this.state.accountname === "") {
+            this.showValidationErr("accountname", "wrong account or password!")
+        } 
+        if(this.state.password.length < 8 || this.state.password.length > 12) {
+            this.showValidationErr("password", "wrong account or password!")
+        }    
     }
 
     render() {
+        let accountnameErr, passwordErr;
+
+        for(let err in this.state.errors) {
+            if(this.state.errors[err].elm === "accountname") {
+                accountnameErr = this.state.errors[err].msg;
+            } if(this.state.errors[err].elm === "password") {
+                passwordErr = this.state.errors[err].msg
+            }
+        }
+
         return (
             <Container>
             <Col sm="4" className="m-auto shadow-lg">
@@ -54,12 +93,14 @@ class LoginBox extends Component {
                         name="accountname" 
                         placeholder="Accountname" 
                         onChange={this.onAccountChange.bind(this)}/>
+                        <small className="text-danger">{accountnameErr ? accountnameErr : ""}</small>
                     </FormGroup>
                     
                     <FormGroup>
                         <Label htmlFor="password">Password</Label>
                         <Input type="password" name="password" placeholder="Password" 
                         onChange={this.onPasswordChange.bind(this)}/>
+                        <small className="text-danger">{passwordErr ? passwordErr : ""}</small>
                     </FormGroup>
                     
                     <Button className="w-100" color="danger" onClick={this.submitLogin.bind(this)}>Login</Button>
