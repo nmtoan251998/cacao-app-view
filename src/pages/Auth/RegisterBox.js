@@ -1,5 +1,5 @@
 import React , { Component } from 'react';
-import { Button, Form, FormGroup, Label, Input } from 'reactstrap';
+import {Container, Col, Button, Form, FormGroup, Label, Input } from 'reactstrap';
 import Axios from 'axios'
 
 import "./Box.css";
@@ -53,6 +53,7 @@ class RegisterBox extends Component {
     }
 
     submitRegister(e) {
+
         let userRegister = {
             username: this.state.username,
             accountname: this.state.accountname,
@@ -61,7 +62,7 @@ class RegisterBox extends Component {
         }
 
         Axios.post("http://localhost:5000/auth/register", userRegister)
-        .then(() => console.log("user was post......"))
+        .then(() => this.props.history.push("/auth/login"))
         .catch((err) => console.log(err))
 
         if(this.state.username === "") {
@@ -97,6 +98,8 @@ class RegisterBox extends Component {
         }
 
         return (
+            <Container>
+            <Col sm="4" className="m-auto shadow-lg">
             <div className="pr-4 pl-4 pb-3">
                 <div className="Box-title p-3 text-muted">
                     Register
@@ -145,6 +148,8 @@ class RegisterBox extends Component {
                     <Button className="w-100" color="danger" onClick={this.submitRegister.bind(this)}>Register</Button>
                 </Form>
             </div>
+            </Col>
+            </Container>
         )
     }
 }
