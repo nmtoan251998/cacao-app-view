@@ -27,7 +27,7 @@ class Auth extends Component {
         return (
             <Container>
                 <Col sm="4" className="m-auto shadow-lg">
-                <Row className="d-flex flex-row justify-content-center mt-3 mb-4">
+                <Row className="d-flex flex-row justify-content-center mt-3 mb-2">
                     <div 
                     className={"text-muted p-2 Auth-controller flex-grow-1 text-center border-bottom " + (this.state.isLoginOpen ? "border-danger" : "")} 
                     onClick={this.showLoginBox.bind(this)}>
