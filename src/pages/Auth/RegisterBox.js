@@ -62,6 +62,7 @@ class RegisterBox extends Component {
         }
 
         Axios.post("http://localhost:5000/auth/register", userRegister)
+        .then(() => window.alert("your register is successful!"))
         .then(() => this.props.history.push("/auth/login"))
         .catch(() => this.showValidationErr("accountname", "This account name already axist"))
 
