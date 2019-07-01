@@ -47,7 +47,8 @@ class LoginBox extends Component {
         this.setState((prevState) => ({errors: [...prevState.errors, {elm, msg}], }));
     }
 
-    submitLogin(event) {
+    submitLogin(e) {
+        e.preventDefault();
         let userLogin = {
             accountname: this.state.accountname,
             password: this.state.password
