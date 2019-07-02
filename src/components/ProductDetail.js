@@ -1,40 +1,42 @@
+/* eslint-disable linebreak-style */
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  Col, Card, CardImg, CardBody,
-  CardTitle, CardSubtitle,
+  Card, CardImg, CardBody,
+  CardTitle, CardSubtitle, CardText,
 } from 'reactstrap';
 
-export default function Product(props) {
+export default function ProductDetail(props) {
   const { Item } = props;
 
   return (
-        <Col sm="4" md="2" xs="6" className="px-1 my-1">
-            <Card>
-                <div className="position-relative">
-                    <CardImg top width="100%" src={Item.image || 'http://dummyimage.com/300x300.png/5fa2dd/ffffff'} alt="Card image cap" />
+            <div className="w-50 mx-auto">
+              <Card >
+                <div className="position-relative ">
+                    <CardImg top width="50%" src={Item.image || 'http://dummyimage.com/300x300.png/5fa2dd/ffffff'} alt="Card image cap" />
                     <div className="btn--group position-absolute fixed-bottom d-flex justify-content-center
 
                     " >
-                        <button className="btn btn-dark w-50 btn-sm rounded-0" onClick={props.onProductClicked}>Chi tiết</button>
-                        <button className="btn btn-dark w-50 btn-sm rounded-0">Đặt hàng</button>
                     </div>
                 </div>
                 <CardBody>
                     <CardTitle>{Item.name}</CardTitle>
                     <CardSubtitle>{Item.price}</CardSubtitle>
+                    <CardText>{Item.description}</CardText>
                 </CardBody>
             </Card>
-        </Col>
+            </div>
   );
 }
 
-Product.propTypes = {
+
+ProductDetail.propTypes = {
   Item: PropTypes.shape({
     _id: PropTypes.string.isRequired,
     image: PropTypes.string,
     name: PropTypes.string.isRequired,
     price: PropTypes.string,
+    description: PropTypes.string.isRequired,
   }),
   onProductClicked: PropTypes.func,
 };
