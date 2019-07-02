@@ -37,7 +37,7 @@ class LoginBox extends Component {
                         )
                     }}
                 </AuthContext.Consumer>
-            <Col sm="4" className="m-auto shadow-lg">
+            <Col sm="10" md="6" lg="4" className="m-auto shadow-lg">
             <div className="pr-4 pl-4 pb-3">
                 <div className="Box-title p-3 text-muted">Login</div>
                 <Form>
