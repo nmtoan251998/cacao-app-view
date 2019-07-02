@@ -50,7 +50,7 @@ export default class ListItems extends React.Component {
       }));
     }).catch((err) => {
       // eslint-disable-next-line no-console
-      console.err(err);
+      console.log(err);
     });
   }
 
