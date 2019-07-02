@@ -69,7 +69,7 @@ class RegisterBox extends Component {
                 if(err.response.data.error) {
                     this.showValidationErr(undefined, err.response.data.error.accountAxist, undefined, undefined)
                 } else {
-                    this.showValidationErr(undefined, undefined,undefined, err.response.data.passwordNotMatch)
+                    this.showValidationErr(undefined, undefined,undefined, err.response.data.error.passwordNotMatch)
                 }
             })
         }
