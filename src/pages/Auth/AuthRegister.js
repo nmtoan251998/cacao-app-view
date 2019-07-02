@@ -66,11 +66,12 @@ class RegisterBox extends Component {
             .then(() => window.alert("your register is successful!"))
             .then(() => this.props.history.push("/auth/login"))
             .catch(err => {
-                if(err.response.data.error) {
-                    this.showValidationErr(undefined, err.response.data.error.accountAxist, undefined, undefined)
+                if(err.response.data.error.accountExist) {
+                    this.showValidationErr(undefined, err.response.data.error.accountExist, undefined, undefined)
                 } else {
                     this.showValidationErr(undefined, undefined,undefined, err.response.data.error.passwordNotMatch)
                 }
+                console.log(err.response.data.error)
             })
         }
     }    

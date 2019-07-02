@@ -51,7 +51,7 @@ export class AuthProvider extends Component {
                 isLogedIn: true}))
                 .catch(err => console.log(err))
             }
-        ).catch(err => this.showValidationErr(err.response.data.error.userNotFound, err.response.data.error.userNotFound));
+        ).catch(err => this.showValidationErr(err.response.data.error.wrongAccount, undefined));
         }
     }
 
