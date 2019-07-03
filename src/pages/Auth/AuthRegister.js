@@ -28,7 +28,16 @@ class RegisterBox extends Component {
             passwordErr: passwordErr,
             password2Err: password2Err
         })
-    } 
+    }
+    
+    onKeySubmit(e) {
+        if(e.keyCode !== 13) {
+            this.showValidationErr(undefined, undefined, undefined, undefined);
+            return
+        }
+
+        this.submitRegister(e)
+    }
 
     onUserChange(e) {
         this.setState({ username: e.target.value });
@@ -78,7 +87,7 @@ class RegisterBox extends Component {
 
     render() {
         return (
-            <Container>
+            <Container className="mt-3">
             <Col sm="10" md="6" lg="4" className="m-auto shadow-lg">
             <div className="pr-4 pl-4 pb-3">
                 <div className="Box-title p-3 text-muted">
@@ -92,7 +101,7 @@ class RegisterBox extends Component {
                         name="username" 
                         placeholder="Username" 
                         onChange={(this.onUserChange.bind(this))} 
-                        required/>
+                        onKeyUp={this.onKeySubmit.bind(this)}/>
                         <small className="text-danger">{this.state.usernameErr ? this.state.usernameErr : ""}</small>
                     </FormGroup>
 
@@ -103,7 +112,7 @@ class RegisterBox extends Component {
                         name="accountname" 
                         placeholder="Accountname" 
                         onChange={(this.onAccountChange.bind(this))}
-                        required/>
+                        onKeyUp={this.onKeySubmit.bind(this)}/>
                         <small className="text-danger">{this.state.accountnameErr ? this.state.accountnameErr : ""}</small>
                     </FormGroup>
                     
@@ -114,7 +123,7 @@ class RegisterBox extends Component {
                         name="password" 
                         placeholder="Password" 
                         onChange={(this.onPasswordChange.bind(this))}
-                        required/>
+                        onKeyUp={this.onKeySubmit.bind(this)}/>
                         <small className="text-danger">{this.state.passwordErr ? this.state.passwordErr : ""}</small>
                     </FormGroup>
 
@@ -125,7 +134,7 @@ class RegisterBox extends Component {
                         name="password2" 
                         placeholder="Password" 
                         onChange={(this.onPassword2Change.bind(this))}
-                        required/>
+                        onKeyUp={this.onKeySubmit.bind(this)}/>
                         <small className="text-danger">{this.state.password2Err ? this.state.password2Err : ""}</small>
                     </FormGroup>
                     

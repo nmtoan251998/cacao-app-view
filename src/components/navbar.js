@@ -16,7 +16,7 @@ class NavComponent extends Component {
 
     render() {
         const guestScreens = (
-            <div className="row ml-5">
+            <div className="row ml-3">
               <NavItem>
                 <NavLink>
                     <Link className="p-1 Auth-link" to="/auth/login">Login</Link>
@@ -31,7 +31,7 @@ class NavComponent extends Component {
         )
       
         const userScreens = ( 
-            <div className="row ml-5">
+            <div className="row ml-3">
                 <NavItem>
                 <AuthContext.Consumer>
                   {({ logout }) => <NavLink href="#" onClick={() => logout()}>Logout</NavLink>}
@@ -41,32 +41,31 @@ class NavComponent extends Component {
         )
 
         return(
-                <div>
-                    <Navbar color="light" light expand="md">
-                        <NavbarBrand href="/">logo</NavbarBrand>
-                        <Collapse navbar>
-                            <Nav className="ml-auto" navbar>
-                                <NavItem>
-                                    <NavLink>
-                                        <Link to="/">Sản phẩm</Link>
-                                    </NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink>
-                                        <Link to="/dat-hang-page">Đặt hàng</Link>
-                                    </NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink>
-                                        <Link to="/lien-he-page">Liên hệ</Link>
-                                    </NavLink>
-                                </NavItem>
-                                <NavItem>
-                                    <NavLink>
-                                        <Link to="/ve-chung-toi">Về chúng tôi</Link>
-                                    </NavLink>
-                                </NavItem>
-                                <AuthContext.Consumer>
+                <Navbar color="light" light expand="md">
+                    <NavbarBrand href="/">logo</NavbarBrand>
+                    <Collapse navbar>
+                        <Nav className="ml-auto" navbar>
+                            <NavItem>
+                                <NavLink>
+                                    <Link to="/">Sản phẩm</Link>
+                                </NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink>
+                                    <Link to="/dat-hang-page">Đặt hàng</Link>
+                                </NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink>
+                                    <Link to="/lien-he-page">Liên hệ</Link>
+                                </NavLink>
+                            </NavItem>
+                            <NavItem>
+                                <NavLink>
+                                    <Link to="/ve-chung-toi">Về chúng tôi</Link>
+                                </NavLink>
+                            </NavItem>
+                            <AuthContext.Consumer>
                                 {({isLogedIn}) => {
                                     return (
                                     <nav>
@@ -74,11 +73,10 @@ class NavComponent extends Component {
                                     </nav>
                                     )
                                 }}
-                                </AuthContext.Consumer>
-                            </Nav>
-                        </Collapse>
-                    </Navbar>
-                </div>
+                            </AuthContext.Consumer>
+                        </Nav>
+                    </Collapse>
+                </Navbar>    
         )
     }
 }

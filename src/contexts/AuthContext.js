@@ -23,6 +23,7 @@ export class AuthProvider extends Component {
         this.submitLogin = this.submitLogin.bind(this);
         this.logout = this.logout.bind(this);
         this.showValidationErr = this.showValidationErr.bind(this)
+        this.onKeySubmit = this.onKeySubmit.bind(this)
     };
 
     logout() {
@@ -38,6 +39,15 @@ export class AuthProvider extends Component {
             accountnameErr: accountnameErr,
             passwordErr: passwordErr
         });
+    }
+
+    onKeySubmit(event, item) {
+        if(event.keyCode !== 13) {
+            this.showValidationErr(undefined, undefined)
+            return
+        }
+
+        this.submitLogin(item)
     }
 
     submitLogin(item) {
@@ -68,6 +78,7 @@ export class AuthProvider extends Component {
             user: this.state.user,
             isLogedIn: this.state.isLogedIn,
             submitLogin: this.submitLogin,
+            onKeySubmit: this.onKeySubmit,
             logout: this.logout,
             accountnameErr: this.state.accountnameErr,
             passwordErr: this.state.passwordErr

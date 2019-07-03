@@ -12,7 +12,7 @@ class LoginBox extends Component {
             accountname: "",
             password: "",
         }
-    } 
+    }
 
     goToRegister(e) {
         this.props.history.push("/auth/register")
@@ -28,7 +28,7 @@ class LoginBox extends Component {
 
     render() {
         return (
-            <Container className="mt-5">
+            <Container className="mt-3">
                 <AuthContext.Consumer>
                     {({isLogedIn}) => {
                         return (
@@ -42,12 +42,18 @@ class LoginBox extends Component {
                         <Form>
                             <FormGroup>
                                 <Label htmlFor="accountname">Accountname</Label>
-                                <Input 
-                                type="text" 
-                                name="accountname" 
-                                placeholder="Accountname" 
-                                onChange={this.onAccountChange.bind(this)}
-                                required/>
+                                <AuthContext.Consumer>
+                                    {({ onKeySubmit }) => <Input 
+                                    type="text" 
+                                    name="accountname" 
+                                    placeholder="Accountname" 
+                                    onChange={this.onAccountChange.bind(this)}
+                                    onKeyUp={(event) => onKeySubmit(event, {
+                                        accountname: this.state.accountname,
+                                        password: this.state.password
+                                    })} 
+                                    />}
+                                </AuthContext.Consumer>
                                 <AuthContext.Consumer>
                                     {({accountnameErr}) => {
                                         return (
@@ -59,12 +65,17 @@ class LoginBox extends Component {
                             
                             <FormGroup>
                                 <Label htmlFor="password">Password</Label>
-                                <Input type="password" 
-                                name="password" 
-                                placeholder="Password"
-                                required 
-                                onChange={this.onPasswordChange.bind(this)}
-                                required/>
+                                <AuthContext.Consumer>
+                                    {({ onKeySubmit }) => <Input type="password" 
+                                        name="password" 
+                                        placeholder="Password"
+                                        required 
+                                        onChange={this.onPasswordChange.bind(this)}
+                                        onKeyUp={(event) => onKeySubmit(event, {
+                                            accountname: this.state.accountname,
+                                            password: this.state.password
+                                        })}/>}
+                                </AuthContext.Consumer>
                                 <AuthContext.Consumer>
                                     {({passwordErr}) => {
                                         return (
