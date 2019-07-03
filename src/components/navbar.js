@@ -67,11 +67,10 @@ class NavComponent extends Component {
                                     </NavLink>
                                 </NavItem>
                                 <AuthContext.Consumer>
-                                {({user}) => {
-                                    console.log(user)
+                                {({isLogedIn}) => {
                                     return (
                                     <nav>
-                                        {!user ? guestScreens : userScreens}
+                                        {!isLogedIn ? guestScreens : userScreens}
                                     </nav>
                                     )
                                 }}
