@@ -7,9 +7,15 @@ export class AuthProvider extends Component {
     constructor(props) {
         super(props);
 
+        let isLogedIn = true;
+        let token = localStorage.getItem("token");
+        if(!token) {
+            isLogedIn = false
+        } 
+
         this.state = {
             user: undefined,
-            isLogedIn: false,
+            isLogedIn,
             accountnameErr: undefined,
             passwordErr: undefined
         }
@@ -20,6 +26,7 @@ export class AuthProvider extends Component {
     };
 
     logout() {
+        localStorage.removeItem("token")
         this.setState({
             user: undefined,
             isLogedIn: false
@@ -41,6 +48,7 @@ export class AuthProvider extends Component {
         } else { 
         Axios.post("http://localhost:5000/auth/login", item)
         .then(res => {
+            localStorage.setItem("token", res.data.token);
             Axios.get("http://localhost:5000/api/users", {
                 headers: {
                     authorization: res.data.token
