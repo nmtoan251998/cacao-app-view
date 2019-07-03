@@ -24,7 +24,7 @@ class NavComponent extends Component {
               </NavItem>
               <NavItem>
                 <NavLink>
-                    <Link className="p-1 Auth-link" to="/auth/register">register</Link>
+                    <Link className="p-1 Auth-link" to="/auth/register">Register</Link>
                 </NavLink>
               </NavItem>
             </div>
