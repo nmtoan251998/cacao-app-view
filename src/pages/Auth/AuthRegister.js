@@ -77,7 +77,10 @@ class RegisterBox extends Component {
             .catch(err => {
                 if(err.response.data.error.accountExist) {
                     this.showValidationErr(undefined, err.response.data.error.accountExist, undefined, undefined)
-                } else {
+                } else if(err.response.data.error.accountnameLength) {
+                    this.showValidationErr(undefined, err.response.data.error.accountnameLength, undefined, undefined)
+                } 
+                else {
                     this.showValidationErr(undefined, undefined,undefined, err.response.data.error.passwordNotMatch)
                 }
                 console.log(err.response.data.error)
