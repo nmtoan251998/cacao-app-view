@@ -1,8 +1,15 @@
 .Box-title {
     text-align: center;
     font-size: 1.8rem;
-    border-bottom: 2px solid #cd3545;
+    border-bottom: 2px solid #eda8bb;
     margin-bottom: 2rem;
 }
 
+.pink-button {
+    background-color: #eda8bb
+}
+
+.pink-button:hover {
+    background-color: #dd7a96
+}
 

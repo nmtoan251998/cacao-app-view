@@ -86,8 +86,7 @@ class LoginBox extends Component {
                             </FormGroup>
                             <AuthContext.Consumer>
                                 {({submitLogin}) => <Button 
-                                className="w-100" 
-                                color="danger" 
+                                className="w-100 pink-button" 
                                 onClick={() => submitLogin({
                                     accountname: this.state.accountname,
                                     password: this.state.password

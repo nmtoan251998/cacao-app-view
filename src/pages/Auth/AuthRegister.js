@@ -141,7 +141,7 @@ class RegisterBox extends Component {
                         <small className="text-danger">{this.state.password2Err ? this.state.password2Err : ""}</small>
                     </FormGroup>
                     
-                    <Button className="w-100" color="danger" onClick={this.submitRegister.bind(this)}>Register</Button>
+                    <Button className="w-100 pink-button" onClick={this.submitRegister.bind(this)}>Register</Button>
                 </Form>
             </div>
             </Col>
