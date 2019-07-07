@@ -13,9 +13,7 @@ export default function Product(props) {
             <Card>
                 <div className="position-relative">
                     <CardImg top width="100%" src={Item.image || 'http://dummyimage.com/300x300.png/5fa2dd/ffffff'} alt="Card image cap" />
-                    <div className="btn--group position-absolute fixed-bottom d-flex justify-content-center
-
-                    " >
+                    <div className="btn--group position-absolute fixed-bottom d-flex justify-content-center " >
                         <button className="btn btn-dark w-50 btn-sm rounded-0" onClick={props.onProductClicked}>Chi tiết</button>
                         <button className="btn btn-dark w-50 btn-sm rounded-0">Đặt hàng</button>
                     </div>

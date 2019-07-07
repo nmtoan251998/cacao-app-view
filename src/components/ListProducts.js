@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable linebreak-style */
 /* eslint-disable implicit-arrow-linebreak */
 import React from 'react';
@@ -39,7 +40,15 @@ export default class ListItems extends React.Component {
     this.state = {
       Items: [],
       activeTab: '1',
-      DescProduct: {},
+      DescProduct: {
+        _id: '000fff',
+        name: 'Loading...',
+        price: 1,
+        type: 'Loading...',
+        featured: false,
+        image: 'http://dummyimage.com/300x300.png/5fa2dd/ffffff',
+        description: 'Loadinggg',
+      },
       showAlert: false,
     };
   }
@@ -135,7 +144,7 @@ export default class ListItems extends React.Component {
                             {this.state.Items.length === 0 && 'Loading....'}
                             {
                                 this.state.Items.length !== 0 && Items.map((Item, index) =>
-                                    <Product Item={Item} key={index} index={index}
+                                    <Product Item={Item} key={Item._id} index={index}
                                     onProductClicked={this.onProductClicked} />)
                             }
                         </Row>
@@ -146,7 +155,7 @@ export default class ListItems extends React.Component {
                             {
                                 this.state.Items.length !== 0 && Items.map((Item, index) =>
                                   Item.featured
-                                    && <Product Item={Item} key={index} index={index}
+                                    && <Product Item={Item} key={Item._id} index={index}
                                     onProductClicked={this.onProductClicked} />)
                             }
                         </Row>
@@ -157,7 +166,7 @@ export default class ListItems extends React.Component {
                             {
                                 this.state.Items.length !== 0 && Items.map((Item, index) =>
                                   Item.type === PRODUCTTYPE.get(2)
-                                    && <Product Item={Item} key={index} index={index}
+                                    && <Product Item={Item} key={Item._id} index={index}
                                     onProductClicked={this.onProductClicked} />)
                             }
                         </Row>
@@ -168,7 +177,7 @@ export default class ListItems extends React.Component {
                             {
                                 this.state.Items.length !== 0 && Items.map((Item, index) =>
                                   Item.type === PRODUCTTYPE.get(1)
-                                  && <Product Item={Item} key={index} index={index}
+                                  && <Product Item={Item} key={Item._id} index={index}
                                   onProductClicked={this.onProductClicked} />)
                             }
                         </Row>
@@ -182,7 +191,7 @@ export default class ListItems extends React.Component {
 ListItems.propTypes = {
   Items: PropTypes.array,
   DescProduct: PropTypes.shape({
-    id: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
     image: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     price: PropTypes.string,

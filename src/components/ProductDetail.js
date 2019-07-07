@@ -35,7 +35,7 @@ ProductDetail.propTypes = {
     _id: PropTypes.string.isRequired,
     image: PropTypes.string,
     name: PropTypes.string.isRequired,
-    price: PropTypes.string,
+    price: PropTypes.number,
     description: PropTypes.string.isRequired,
   }),
   onProductClicked: PropTypes.func,
