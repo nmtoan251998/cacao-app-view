@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable linebreak-style */
 /* eslint-disable implicit-arrow-linebreak */
 import React from 'react';
@@ -13,14 +14,20 @@ import {
   Row,
 } from 'reactstrap';
 
+import SweetAlert from 'sweetalert-react';
+import { renderToStaticMarkup } from 'react-dom/server';
+
 import classnames from 'classnames';
-import ProTypes from 'prop-types';
+import PropTypes from 'prop-types';
+
 import Product from './Product';
+import ProductDetail from './ProductDetail';
+
+import '../../node_modules/sweetalert/dist/sweetalert.css';
 
 const PRODUCTTYPE = new Map();
 PRODUCTTYPE.set(1, 'food');
 PRODUCTTYPE.set(2, 'drinks');
-
 
 export default class ListItems extends React.Component {
   constructor() {
@@ -28,9 +35,21 @@ export default class ListItems extends React.Component {
 
     this.toggle = this.toggle.bind(this);
 
+    this.onProductClicked = this.onProductClicked.bind(this);
+
     this.state = {
       Items: [],
       activeTab: '1',
+      DescProduct: {
+        _id: '000fff',
+        name: 'Loading...',
+        price: 1,
+        type: 'Loading...',
+        featured: false,
+        image: 'http://dummyimage.com/300x300.png/5fa2dd/ffffff',
+        description: 'Loadinggg',
+      },
+      showAlert: false,
     };
   }
 
@@ -42,8 +61,21 @@ export default class ListItems extends React.Component {
     }
   }
 
+  onProductClicked() {
+    Axios.get('/api/products/:id').then((result) => {
+      const DescProduct = result.data;
+      this.setState(() => ({
+        DescProduct,
+        showAlert: true,
+      }));
+    }).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.log(err);
+    });
+  }
+
   componentDidMount() {
-    Axios.get('/api/products/text').then((result) => {
+    Axios.get('/api/products/all').then((result) => {
       const Items = result.data;
       this.setState(() => ({
         Items,
@@ -54,10 +86,24 @@ export default class ListItems extends React.Component {
     });
   }
 
+
   render() {
     const { Items } = this.state;
     return (
             <Container>
+              <SweetAlert
+              show={this.state.showAlert}
+              title={this.state.DescProduct.name}
+              html
+              showCancelButton
+              animation="pop"
+              confirmButtonText="Đặt hàng"
+              cancelButtonText="&nbsp;&nbsp;&nbsp;Đóng&nbsp;&nbsp;&nbsp;"
+              text={ renderToStaticMarkup(<ProductDetail Item={this.state.DescProduct}/>) }
+              onConfirm={() => this.setState({ showAlert: false })}
+              onCancel={() => this.setState({ showAlert: false })}
+              onEscapeKey={() => this.setState({ showAlert: false })}
+            />
                 <Nav tabs>
                     <NavItem>
                         <NavLink
@@ -98,7 +144,8 @@ export default class ListItems extends React.Component {
                             {this.state.Items.length === 0 && 'Loading....'}
                             {
                                 this.state.Items.length !== 0 && Items.map((Item, index) =>
-                                    <Product Item={Item} key={index} index={index} />)
+                                    <Product Item={Item} key={Item._id} index={index}
+                                    onProductClicked={this.onProductClicked} />)
                             }
                         </Row>
                     </TabPane>
@@ -107,8 +154,9 @@ export default class ListItems extends React.Component {
                             {this.state.Items.length === 0 && 'Loading....'}
                             {
                                 this.state.Items.length !== 0 && Items.map((Item, index) =>
-                                  Item.product_featured
-                                    && <Product Item={Item} key={index} index={index} />)
+                                  Item.featured
+                                    && <Product Item={Item} key={Item._id} index={index}
+                                    onProductClicked={this.onProductClicked} />)
                             }
                         </Row>
                     </TabPane>
@@ -117,8 +165,9 @@ export default class ListItems extends React.Component {
                             {this.state.Items.length === 0 && 'Loading....'}
                             {
                                 this.state.Items.length !== 0 && Items.map((Item, index) =>
-                                  Item.product_type === PRODUCTTYPE.get(2)
-                                    && <Product Item={Item} key={index} index={index} />)
+                                  Item.type === PRODUCTTYPE.get(2)
+                                    && <Product Item={Item} key={Item._id} index={index}
+                                    onProductClicked={this.onProductClicked} />)
                             }
                         </Row>
                     </TabPane>
@@ -127,8 +176,9 @@ export default class ListItems extends React.Component {
                             {this.state.Items.length === 0 && 'Loading....'}
                             {
                                 this.state.Items.length !== 0 && Items.map((Item, index) =>
-                                  Item.product_type === PRODUCTTYPE.get(1)
-                                  && <Product Item={Item} key={index} index={index} />)
+                                  Item.type === PRODUCTTYPE.get(1)
+                                  && <Product Item={Item} key={Item._id} index={index}
+                                  onProductClicked={this.onProductClicked} />)
                             }
                         </Row>
                     </TabPane>
@@ -139,5 +189,12 @@ export default class ListItems extends React.Component {
 }
 
 ListItems.propTypes = {
-  Items: ProTypes.array,
+  Items: PropTypes.array,
+  DescProduct: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    price: PropTypes.string,
+    description: PropTypes.string.isRequired,
+  }),
 };

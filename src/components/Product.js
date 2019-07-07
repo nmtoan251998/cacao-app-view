@@ -12,16 +12,14 @@ export default function Product(props) {
         <Col sm="4" md="2" xs="6" className="px-1 my-1">
             <Card>
                 <div className="position-relative">
-                    <CardImg top width="100%" src={Item.product_image} alt="Card image cap" />
-                    <div className="btn--group position-absolute fixed-bottom d-flex justify-content-center
-
-                    " >
-                        <button className="btn btn-dark w-50 btn-sm rounded-0">Chi tiết</button>
+                    <CardImg top width="100%" src={Item.image || 'http://dummyimage.com/300x300.png/5fa2dd/ffffff'} alt="Card image cap" />
+                    <div className="btn--group position-absolute fixed-bottom d-flex justify-content-center " >
+                        <button className="btn btn-dark w-50 btn-sm rounded-0" onClick={props.onProductClicked}>Chi tiết</button>
                         <button className="btn btn-dark w-50 btn-sm rounded-0">Đặt hàng</button>
                     </div>
                 </div>
                 <CardBody>
-                    <CardTitle>{Item.product_name}</CardTitle>
+                    <CardTitle>{Item.name}</CardTitle>
                     <CardSubtitle>{Item.price}</CardSubtitle>
                 </CardBody>
             </Card>
@@ -31,9 +29,10 @@ export default function Product(props) {
 
 Product.propTypes = {
   Item: PropTypes.shape({
-    product_id: PropTypes.string.isRequired,
-    product_image: PropTypes.string.isRequired,
-    product_name: PropTypes.string.isRequired,
+    _id: PropTypes.string.isRequired,
+    image: PropTypes.string,
+    name: PropTypes.string.isRequired,
     price: PropTypes.string,
   }),
+  onProductClicked: PropTypes.func,
 };
