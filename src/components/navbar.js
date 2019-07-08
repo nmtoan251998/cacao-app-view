@@ -1,36 +1,36 @@
-import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {
-    Collapse,
-    Navbar,
-    NavbarToggler,
-    NavbarBrand,
-    Nav,
-    NavItem,
-    NavLink
-    } from 'reactstrap';
+  Collapse,
+  Navbar,
+  NavbarToggler,
+  NavbarBrand,
+  Nav,
+  NavItem,
+  NavLink,
+} from 'reactstrap';
 
-import { AuthContext } from '../contexts/AuthContext';
+import AuthContext from '../contexts/AuthContext';
 
 class NavComponent extends Component {
-    constructor(props) {
-        super(props);
-    
-        this.toggle = this.toggle.bind(this);
-        this.state = {
-          isOpen: false
-        };
-      }
+  constructor(props) {
+    super(props);
 
-    toggle() {
-        this.setState({
-          isOpen: !this.state.isOpen
-        });
-      }
+    this.toggle = this.toggle.bind(this);
+    this.state = {
+      isOpen: false,
+    };
+  }
 
-    render() {
-        const guestScreens = (
+  toggle() {
+    this.setState({
+      isOpen: !this.state.isOpen,
+    });
+  }
+
+  render() {
+    const guestScreens = (
             <div className="d-flex flex-column flex-md-row pl-3 pr-3 align-items-center">
               <NavItem>
                 <NavLink>
@@ -43,9 +43,9 @@ class NavComponent extends Component {
                 </NavLink>
               </NavItem>
             </div>
-        )
-      
-        const userScreens = ( 
+    );
+
+    const userScreens = (
             <div className="d-flex flex-md-row pl-3 pr-3 align-items-center">
                 <NavItem>
                 <AuthContext.Consumer>
@@ -53,9 +53,9 @@ class NavComponent extends Component {
                 </AuthContext.Consumer>
                 </NavItem>
             </div>
-        )
+    );
 
-        return(
+    return (
                 <Navbar color="light" light expand="md">
                     <NavbarBrand href="/">logo</NavbarBrand>
                     <NavbarToggler onClick={this.toggle} />
@@ -82,19 +82,17 @@ class NavComponent extends Component {
                                 </NavLink>
                             </NavItem>
                             <AuthContext.Consumer>
-                                {({isLogedIn}) => {
-                                    return (
+                                {({ isLogedIn }) => (
                                     <nav>
                                         {!isLogedIn ? guestScreens : userScreens}
                                     </nav>
-                                    )
-                                }}
+                                )}
                             </AuthContext.Consumer>
                         </Nav>
                     </Collapse>
-                </Navbar>    
-        )
-    }
+                </Navbar>
+    );
+  }
 }
 
-export default NavComponent
+export default NavComponent;
