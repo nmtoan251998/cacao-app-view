@@ -4,7 +4,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-import AuthProvider from './contexts/AuthContext';
+import AuthProvider from './contexts/AuthProvider';
 import Nav from './components/navbar';
 import AuthLogin from './pages/Auth/AuthLogin';
 import AuthRegister from './pages/Auth/AuthRegister';
