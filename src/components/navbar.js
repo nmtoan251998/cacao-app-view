@@ -8,7 +8,6 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  NavLink,
 } from 'reactstrap';
 
 import AuthContext from '../contexts/AuthContext';
@@ -33,14 +32,10 @@ class NavComponent extends Component {
     const guestScreens = (
             <div className="d-flex flex-column flex-md-row pl-3 pr-3 align-items-center">
               <NavItem>
-                <NavLink>
-                    <Link className="p-1 Auth-link" to="/auth/login">Login</Link>
-                </NavLink>
+                  <Link className="p-1 Auth-link" to="/auth/login">Login</Link>
               </NavItem>
               <NavItem>
-                <NavLink>
-                    <Link className="p-1 Auth-link" to="/auth/register">Register</Link>
-                </NavLink>
+                  <Link className="p-1 Auth-link" to="/auth/register">Register</Link>
               </NavItem>
             </div>
     );
@@ -49,7 +44,7 @@ class NavComponent extends Component {
             <div className="d-flex flex-md-row pl-3 pr-3 align-items-center">
                 <NavItem>
                 <AuthContext.Consumer>
-                  {({ logout }) => <NavLink href="#" onClick={() => logout()}>Logout</NavLink>}
+                  {({ logout }) => <Link href="#" onClick={() => logout()} >Logout</Link>}
                 </AuthContext.Consumer>
                 </NavItem>
             </div>
@@ -62,24 +57,16 @@ class NavComponent extends Component {
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>
                             <NavItem>
-                                <NavLink>
-                                    <Link to="/">Sản phẩm</Link>
-                                </NavLink>
+                              <Link className="pl-2 pr-2" to="/">Sản phẩm</Link>
                             </NavItem>
                             <NavItem>
-                                <NavLink>
-                                    <Link to="/dat-hang-page">Đặt hàng</Link>
-                                </NavLink>
+                              <Link className="pl-2 pr-2" to="/dat-hang-page">Đặt hàng</Link>
                             </NavItem>
                             <NavItem>
-                                <NavLink>
-                                    <Link to="/lien-he-page">Liên hệ</Link>
-                                </NavLink>
+                              <Link className="pl-2 pr-2" to="/lien-he-page">Liên hệ</Link>
                             </NavItem>
                             <NavItem>
-                                <NavLink>
-                                    <Link to="/ve-chung-toi">Về chúng tôi</Link>
-                                </NavLink>
+                              <Link className="pl-2 pr-2" to="/ve-chung-toi">Về chúng tôi</Link>
                             </NavItem>
                             <AuthContext.Consumer>
                                 {({ isLogedIn }) => (
