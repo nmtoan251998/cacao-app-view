@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import React, { Component } from 'react';
 import {
   Container, Col, Button, Form, FormGroup, Label, Input,

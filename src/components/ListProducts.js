@@ -1,5 +1,6 @@
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable linebreak-style */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable implicit-arrow-linebreak */
 import React from 'react';
 import Axios from 'axios';
@@ -20,8 +21,11 @@ import { renderToStaticMarkup } from 'react-dom/server';
 import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
+import Pagination from 'react-js-pagination';
+
 import Product from './Product';
 import ProductDetail from './ProductDetail';
+
 
 import '../../node_modules/sweetalert/dist/sweetalert.css';
 
@@ -29,6 +33,11 @@ const PRODUCTTYPE = new Map();
 PRODUCTTYPE.set(1, 'food');
 PRODUCTTYPE.set(2, 'drinks');
 
+const SCREENTYPE = new Map();
+SCREENTYPE.set('landscape_phones', 576);
+SCREENTYPE.set('tablets', 768);
+SCREENTYPE.set('desktops', 992);
+SCREENTYPE.set('large_desktops', 1400);
 export default class ListItems extends React.Component {
   constructor() {
     super();
@@ -36,6 +45,8 @@ export default class ListItems extends React.Component {
     this.toggle = this.toggle.bind(this);
 
     this.onProductClicked = this.onProductClicked.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
+    this.handlePaginatingData = this.handlePaginatingData.bind(this);
 
     this.state = {
       Items: [],
@@ -50,6 +61,7 @@ export default class ListItems extends React.Component {
         description: 'Loadinggg',
       },
       showAlert: false,
+      activePage: 1,
     };
   }
 
@@ -74,6 +86,12 @@ export default class ListItems extends React.Component {
     });
   }
 
+  handlePageChange(pageNumber) {
+    this.setState(() => ({
+      activePage: pageNumber,
+    }));
+  }
+
   componentDidMount() {
     Axios.get('/api/products/all').then((result) => {
       const Items = result.data;
@@ -86,104 +104,144 @@ export default class ListItems extends React.Component {
     });
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  handlePaginatingData(Items = []) {
+    const currentScreenWidth = window.innerWidth;
+    const { activePage: pageNumber } = this.state;
+    let NumberOfProductDisplayOnScreen;
+    let PaginationData = [];
+    if (currentScreenWidth < SCREENTYPE.get('landscape_phones')) {
+      PaginationData = Items.slice(4 * (pageNumber - 1), pageNumber * 4);
+      NumberOfProductDisplayOnScreen = 4;
+    } else if (currentScreenWidth < SCREENTYPE.get('tablets')) {
+      PaginationData = Items.slice(6 * (pageNumber - 1), pageNumber * 6);
+      NumberOfProductDisplayOnScreen = 6;
+    } else if (currentScreenWidth < SCREENTYPE.get('large_desktops')) {
+      PaginationData = Items.slice(12 * (pageNumber - 1), pageNumber * 12);
+      NumberOfProductDisplayOnScreen = 12;
+    } else {
+      PaginationData = Items.slice(14 * (pageNumber - 1), pageNumber * 14);
+      NumberOfProductDisplayOnScreen = 14;
+    }
+
+    while ((PaginationData.length !== 0)
+    && (PaginationData.length < NumberOfProductDisplayOnScreen)) {
+      PaginationData.push(Items.shift());
+    }
+
+    return PaginationData;
+  }
+
 
   render() {
-    const { Items } = this.state;
+    let { Items } = this.state;
+    const TotalItems = Items.length;
+    // Items on state not immutable
+    Items = this.handlePaginatingData(Items);
     return (
-            <Container>
-              <SweetAlert
-              show={this.state.showAlert}
-              title={this.state.DescProduct.name}
-              html
-              showCancelButton
-              animation="pop"
-              confirmButtonText="Đặt hàng"
-              cancelButtonText="&nbsp;&nbsp;&nbsp;Đóng&nbsp;&nbsp;&nbsp;"
-              text={ renderToStaticMarkup(<ProductDetail Item={this.state.DescProduct}/>) }
-              onConfirm={() => this.setState({ showAlert: false })}
-              onCancel={() => this.setState({ showAlert: false })}
-              onEscapeKey={() => this.setState({ showAlert: false })}
-            />
-                <Nav tabs>
-                    <NavItem>
-                        <NavLink
-                            className={classnames({ active: this.state.activeTab === '1' })}
-                            onClick={() => { this.toggle('1'); }}
-                        >
-                            Logo
+      <Container>
+        <SweetAlert
+          show={this.state.showAlert}
+          title={this.state.DescProduct.name}
+          html
+          showCancelButton
+          animation="pop"
+          confirmButtonText="Đặt hàng"
+          cancelButtonText="&nbsp;&nbsp;&nbsp;Đóng&nbsp;&nbsp;&nbsp;"
+          text={renderToStaticMarkup(<ProductDetail Item={this.state.DescProduct} />)}
+          onConfirm={() => this.setState({ showAlert: false })}
+          onCancel={() => this.setState({ showAlert: false })}
+          onEscapeKey={() => this.setState({ showAlert: false })}
+        />
+        <Nav tabs>
+          <NavItem>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === '1' })}
+              onClick={() => { this.toggle('1'); }}
+            >
+              Logo
                         </NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <NavLink
-                            className={classnames({ active: this.state.activeTab === '2' })}
-                            onClick={() => { this.toggle('2'); }}
-                        >
-                            Sản phẩm nổi bật
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === '2' })}
+              onClick={() => { this.toggle('2'); }}
+            >
+              Sản phẩm nổi bật
                         </NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <NavLink
-                            className={classnames({ active: this.state.activeTab === '3' })}
-                            onClick={() => { this.toggle('3'); }}
-                        >
-                            Thức uống
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === '3' })}
+              onClick={() => { this.toggle('3'); }}
+            >
+              Thức uống
                         </NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <NavLink
-                            className={classnames({ active: this.state.activeTab === '4' })}
-                            onClick={() => { this.toggle('4'); }}
-                        >
-                            Đồ ăn
+          </NavItem>
+          <NavItem>
+            <NavLink
+              className={classnames({ active: this.state.activeTab === '4' })}
+              onClick={() => { this.toggle('4'); }}
+            >
+              Đồ ăn
                         </NavLink>
-                    </NavItem>
-                </Nav>
-                <TabContent activeTab={this.state.activeTab}>
-                    <TabPane tabId="1">
-                        <Row >
-                            {this.state.Items.length === 0 && 'Loading....'}
-                            {
-                                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                                    <Product Item={Item} key={Item._id} index={index}
-                                    onProductClicked={this.onProductClicked} />)
-                            }
-                        </Row>
-                    </TabPane>
-                    <TabPane tabId="2">
-                        <Row>
-                            {this.state.Items.length === 0 && 'Loading....'}
-                            {
-                                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                                  Item.featured
-                                    && <Product Item={Item} key={Item._id} index={index}
-                                    onProductClicked={this.onProductClicked} />)
-                            }
-                        </Row>
-                    </TabPane>
-                    <TabPane tabId="3">
-                        <Row>
-                            {this.state.Items.length === 0 && 'Loading....'}
-                            {
-                                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                                  Item.type === PRODUCTTYPE.get(2)
-                                    && <Product Item={Item} key={Item._id} index={index}
-                                    onProductClicked={this.onProductClicked} />)
-                            }
-                        </Row>
-                    </TabPane>
-                    <TabPane tabId="4">
-                        <Row>
-                            {this.state.Items.length === 0 && 'Loading....'}
-                            {
-                                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                                  Item.type === PRODUCTTYPE.get(1)
-                                  && <Product Item={Item} key={Item._id} index={index}
-                                  onProductClicked={this.onProductClicked} />)
-                            }
-                        </Row>
-                    </TabPane>
-                </TabContent>
-            </Container>
+          </NavItem>
+        </Nav>
+        <TabContent activeTab={this.state.activeTab}>
+          <TabPane tabId="1">
+            <Row >
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                this.state.Items.length !== 0 && Items.map((Item, index) =>
+                  <Product Item={Item} key={Item._id} index={index}
+                    onProductClicked={this.onProductClicked}></Product>)
+              }
+            </Row>
+          </TabPane>
+          <TabPane tabId="2">
+            <Row>
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                this.state.Items.length !== 0 && Items.map((Item, index) =>
+                  Item.featured
+                  && <Product Item={Item} key={Item._id} index={index}
+                    onProductClicked={this.onProductClicked} />)
+              }
+            </Row>
+          </TabPane>
+          <TabPane tabId="3">
+            <Row>
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                this.state.Items.length !== 0 && Items.map((Item, index) =>
+                  Item.type === PRODUCTTYPE.get(2)
+                  && <Product Item={Item} key={Item._id} index={index}
+                    onProductClicked={this.onProductClicked} />)
+              }
+            </Row>
+          </TabPane>
+          <TabPane tabId="4">
+            <Row>
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                this.state.Items.length !== 0 && Items.map((Item, index) =>
+                  Item.type === PRODUCTTYPE.get(1)
+                  && <Product Item={Item} key={Item._id} index={index}
+                    onProductClicked={this.onProductClicked} />)
+              }
+            </Row>
+          </TabPane>
+          <Pagination
+                activePage={this.state.activePage}
+                itemsCountPerPage={Items.length}
+                totalItemsCount={TotalItems}
+                pageRangeDisplayed={3}
+                onChange={this.handlePageChange}
+                itemClass="page-item"
+                linkClass="page-link"
+              />
+        </TabContent>
+      </Container>
     );
   }
 }
