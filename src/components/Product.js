@@ -6,6 +6,8 @@ import {
   CardTitle, CardSubtitle,
 } from 'reactstrap';
 
+import { AppContext } from '../contexts/CartContext';
+
 export default function Product(props) {
   const { Item } = props;
 
@@ -16,7 +18,13 @@ export default function Product(props) {
                     <CardImg top width="100%" src={Item.image || 'http://dummyimage.com/300x300.png/5fa2dd/ffffff'} alt="Card image cap" />
                     <div className="btn--group position-absolute fixed-bottom d-flex justify-content-center " >
                         <button className="btn btn-dark w-50 btn-sm rounded-0" onClick={props.onProductClicked}>Chi tiết</button>
-                        <button className="btn btn-dark w-50 btn-sm rounded-0">Đặt hàng</button>
+                        <AppContext.Consumer>
+                          { ({ addToCart }) => (
+                            <button className="btn btn-dark w-50 btn-sm rounded-0" onClick = {
+                              () => addToCart(Item)
+                            }>Đặt hàng</button>
+                          )}
+                        </AppContext.Consumer>
                     </div>
                 </div>
                 <CardBody>
