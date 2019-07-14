@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -11,6 +12,7 @@ import {
 } from 'reactstrap';
 
 import AuthContext from '../contexts/AuthContext';
+import { AppContext } from '../contexts/CartContext';
 
 class NavComponent extends Component {
   constructor(props) {
@@ -69,7 +71,11 @@ class NavComponent extends Component {
                               <Link className="pl-2 pr-2" to="#">Về chúng tôi</Link>
                             </NavItem>
                             <NavItem>
-                              <Link className="pl-2 pr-2" to="#">Giỏ hàng (0)</Link>
+                              <AppContext.Consumer>
+                                {({ CartItems }) => <Link className="pl-2 pr-2" to="#">
+                                  Giỏ hàng ({CartItems.length})
+                                  </Link>}
+                              </AppContext.Consumer>
                             </NavItem>
                             <AuthContext.Consumer>
                                 {({ isLogedIn }) => (
