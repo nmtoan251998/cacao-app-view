@@ -62,7 +62,7 @@ export default class ListItems extends React.Component {
   }
 
   onProductClicked() {
-    Axios.get('/api/products/:id').then((result) => {
+    Axios.patch('http://localhost:5000/api/products/:id').then((result) => {
       const DescProduct = result.data;
       this.setState(() => ({
         DescProduct,
@@ -70,12 +70,12 @@ export default class ListItems extends React.Component {
       }));
     }).catch((err) => {
       // eslint-disable-next-line no-console
-      console.log(err);
+      console.error(err);
     });
   }
 
   componentDidMount() {
-    Axios.get('/api/products/all').then((result) => {
+    Axios.get('http://localhost:5000/api/products/all').then((result) => {
       const Items = result.data.products;
       this.setState(() => ({
         Items,
