@@ -44,7 +44,7 @@ class NavComponent extends Component {
             <div className="d-flex flex-md-row pl-3 pr-3 align-items-center">
                 <NavItem>
                 <AuthContext.Consumer>
-                  {({ logout }) => <Link href="#" onClick={() => logout()} >Logout</Link>}
+                  {({ logout }) => <Link to="#" onClick={() => logout()} >Logout</Link>}
                 </AuthContext.Consumer>
                 </NavItem>
             </div>
@@ -60,13 +60,16 @@ class NavComponent extends Component {
                               <Link className="pl-2 pr-2" to="/">Sản phẩm</Link>
                             </NavItem>
                             <NavItem>
-                              <Link className="pl-2 pr-2" to="/dat-hang-page">Đặt hàng</Link>
+                              <Link className="pl-2 pr-2" to="/dat-hang">Đặt hàng</Link>
                             </NavItem>
                             <NavItem>
-                              <Link className="pl-2 pr-2" to="/lien-he-page">Liên hệ</Link>
+                              <Link className="pl-2 pr-2" to="#">Liên hệ</Link>
                             </NavItem>
                             <NavItem>
-                              <Link className="pl-2 pr-2" to="/ve-chung-toi">Về chúng tôi</Link>
+                              <Link className="pl-2 pr-2" to="#">Về chúng tôi</Link>
+                            </NavItem>
+                            <NavItem>
+                              <Link className="pl-2 pr-2" to="#">Giỏ hàng (0)</Link>
                             </NavItem>
                             <AuthContext.Consumer>
                                 {({ isLogedIn }) => (

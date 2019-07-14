@@ -27,7 +27,7 @@ import '../../node_modules/sweetalert/dist/sweetalert.css';
 
 const PRODUCTTYPE = new Map();
 PRODUCTTYPE.set(1, 'food');
-PRODUCTTYPE.set(2, 'drinks');
+PRODUCTTYPE.set(2, 'drink');
 
 export default class ListItems extends React.Component {
   constructor() {
@@ -76,7 +76,7 @@ export default class ListItems extends React.Component {
 
   componentDidMount() {
     Axios.get('/api/products/all').then((result) => {
-      const Items = result.data;
+      const Items = result.data.products;
       this.setState(() => ({
         Items,
       }));
@@ -140,7 +140,7 @@ export default class ListItems extends React.Component {
                 </Nav>
                 <TabContent activeTab={this.state.activeTab}>
                     <TabPane tabId="1">
-                        <Row >
+                        <Row>
                             {this.state.Items.length === 0 && 'Loading....'}
                             {
                                 this.state.Items.length !== 0 && Items.map((Item, index) =>
