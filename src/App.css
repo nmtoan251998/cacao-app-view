@@ -9,3 +9,18 @@ body{
 .pagination{
   justify-content: center;
 }
+
+.z-index-9999{
+  z-index: 9999;
+}
+
+.u-color-transparent{
+  background-color: transparent !important;
+  color:inherit !important;
+  border-color: transparent !important;
+  border-bottom:none !important;
+}
+
+.u-color-transparent:hover{
+  border-color: #e9ecef #e9ecef #dee2e6 !important;
+}

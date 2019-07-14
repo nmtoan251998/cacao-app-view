@@ -13,6 +13,10 @@ import {
   NavItem,
   NavLink,
   Row,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem
 } from 'reactstrap';
 
 import SweetAlert from 'sweetalert-react';
@@ -43,7 +47,8 @@ export default class ListItems extends React.Component {
   constructor() {
     super();
 
-    this.toggle = this.toggle.bind(this);
+    this.toggleNav = this.toggleNav.bind(this);
+    this.toggleDropdown = this.toggleDropdown.bind(this);
 
     this.onProductClicked = this.onProductClicked.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
@@ -63,15 +68,22 @@ export default class ListItems extends React.Component {
       },
       showAlert: false,
       activePage: 1,
+      dropdownOpen: false,
     };
   }
 
-  toggle(tab) {
+  toggleNav(tab) {
     if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab,
       });
     }
+  }
+
+  toggleDropdown() {
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen,
+    }));
   }
 
   onProductClicked() {
@@ -126,7 +138,7 @@ export default class ListItems extends React.Component {
     }
 
     while ((PaginationData.length !== 0)
-    && (PaginationData.length < NumberOfProductDisplayOnScreen)) {
+      && (PaginationData.length < NumberOfProductDisplayOnScreen)) {
       PaginationData.push(Items.shift());
     }
 
@@ -158,7 +170,7 @@ export default class ListItems extends React.Component {
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '1' })}
-              onClick={() => { this.toggle('1'); }}
+              onClick={() => { this.toggleNav('1'); }}
             >
               Logo
                         </NavLink>
@@ -166,7 +178,7 @@ export default class ListItems extends React.Component {
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '2' })}
-              onClick={() => { this.toggle('2'); }}
+              onClick={() => { this.toggleNav('2'); }}
             >
               Sản phẩm nổi bật
                         </NavLink>
@@ -174,7 +186,7 @@ export default class ListItems extends React.Component {
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '3' })}
-              onClick={() => { this.toggle('3'); }}
+              onClick={() => { this.toggleNav('3'); }}
             >
               Thức uống
                         </NavLink>
@@ -182,10 +194,26 @@ export default class ListItems extends React.Component {
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '4' })}
-              onClick={() => { this.toggle('4'); }}
+              onClick={() => { this.toggleNav('4'); }}
             >
               Đồ ăn
                         </NavLink>
+          </NavItem>
+          <NavItem>
+            <Dropdown className="z-index-9999 " isOpen={this.state.dropdownOpen} toggle={this.toggleDropdown}>
+                  <DropdownToggle className="btn u-color-transparent nav-links" caret>
+                    Sắp xếp
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem header>Giá</DropdownItem>
+                    <DropdownItem>Thấp -&gt; Cao</DropdownItem>
+                    <DropdownItem>Cao -&gt; Thấp</DropdownItem>
+                    <DropdownItem divider />
+                    <DropdownItem header>Ưu đãi</DropdownItem>
+                    <DropdownItem>Giảm giá</DropdownItem>
+                    <DropdownItem>Voucher</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
           </NavItem>
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
@@ -233,16 +261,21 @@ export default class ListItems extends React.Component {
                 }
               </Row>
             </TabPane>
+            <TabPane tabId="5">
+              <Row>
+                
+              </Row>
+            </TabPane>
           </CartContext>
           <Pagination
-                activePage={this.state.activePage}
-                itemsCountPerPage={Items.length}
-                totalItemsCount={TotalItems}
-                pageRangeDisplayed={3}
-                onChange={this.handlePageChange}
-                itemClass="page-item"
-                linkClass="page-link"
-              />
+            activePage={this.state.activePage}
+            itemsCountPerPage={Items.length}
+            totalItemsCount={TotalItems}
+            pageRangeDisplayed={3}
+            onChange={this.handlePageChange}
+            itemClass="page-item"
+            linkClass="page-link"
+          />
         </TabContent>
       </Container>
     );

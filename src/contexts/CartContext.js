@@ -23,6 +23,8 @@ export class CartContext extends React.Component {
         CartItems: prevState.CartItems.concat(item),
       };
     });
+    console.log(this.state.CartItems.length);
+    
   }
 
   render() {
