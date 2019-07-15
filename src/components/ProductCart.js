@@ -20,7 +20,7 @@ import { AppContext } from '../contexts/CartContext';
 export default function ProductCart(props) {
   const { Item } = props;
   return(
-        <Col lg="6" md="8" sm="10" className="m-2">
+        <Col lg="8" className="m-2">
         <Card className="d-flex flex-row">
             <div className="d-flex flex-row justify-content-center align-items-center p-4">
                 <CardImg top width="100%" src={ Item.image } alt="Card image cap"/>

@@ -14,6 +14,10 @@ import {
   NavItem,
   NavLink,
   Row,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from 'reactstrap';
 
 import SweetAlert from 'sweetalert-react';
@@ -26,8 +30,6 @@ import Pagination from 'react-js-pagination';
 
 import Product from './Product';
 import ProductDetail from './ProductDetail';
-
-import { CartContext } from '../contexts/CartContext';
 
 import '../../node_modules/sweetalert/dist/sweetalert.css';
 
@@ -44,7 +46,8 @@ export default class ListItems extends React.Component {
   constructor() {
     super();
 
-    this.toggle = this.toggle.bind(this);
+    this.toggleNav = this.toggleNav.bind(this);
+    this.toggleDropdown = this.toggleDropdown.bind(this);
 
     this.onProductClicked = this.onProductClicked.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
@@ -64,10 +67,11 @@ export default class ListItems extends React.Component {
       },
       showAlert: false,
       activePage: 1,
+      dropdownOpen: false,
     };
   }
 
-  toggle(tab) {
+  toggleNav(tab) {
     if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab,
@@ -75,8 +79,14 @@ export default class ListItems extends React.Component {
     }
   }
 
+  toggleDropdown() {
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen,
+    }));
+  }
+
   onProductClicked() {
-    Axios.patch('http://localhost:5000/api/products/:id').then((result) => {
+    Axios.get('http://localhost:5000/api/products/:id').then((result) => {
       const DescProduct = result.data;
       this.setState(() => ({
         DescProduct,
@@ -95,7 +105,7 @@ export default class ListItems extends React.Component {
   }
 
   componentDidMount() {
-    Axios.get('http://local/api/products/all').then((result) => {
+    Axios.get('http://localhost:5000/api/products/all').then((result) => {
       const { products: Items } = result.data;
       this.setState(() => ({
         Items,
@@ -127,7 +137,7 @@ export default class ListItems extends React.Component {
     }
 
     while ((PaginationData.length !== 0)
-    && (PaginationData.length < NumberOfProductDisplayOnScreen)) {
+      && (PaginationData.length < NumberOfProductDisplayOnScreen)) {
       PaginationData.push(Items.shift());
     }
 
@@ -159,7 +169,7 @@ export default class ListItems extends React.Component {
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '1' })}
-              onClick={() => { this.toggle('1'); }}
+              onClick={() => { this.toggleNav('1'); }}
             >
               Logo
                         </NavLink>
@@ -167,7 +177,7 @@ export default class ListItems extends React.Component {
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '2' })}
-              onClick={() => { this.toggle('2'); }}
+              onClick={() => { this.toggleNav('2'); }}
             >
               Sản phẩm nổi bật
                         </NavLink>
@@ -175,7 +185,7 @@ export default class ListItems extends React.Component {
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '3' })}
-              onClick={() => { this.toggle('3'); }}
+              onClick={() => { this.toggleNav('3'); }}
             >
               Thức uống
                         </NavLink>
@@ -183,67 +193,86 @@ export default class ListItems extends React.Component {
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '4' })}
-              onClick={() => { this.toggle('4'); }}
+              onClick={() => { this.toggleNav('4'); }}
             >
               Đồ ăn
                         </NavLink>
           </NavItem>
+          <NavItem>
+            <Dropdown className="z-index-9999 " isOpen={this.state.dropdownOpen} toggle={this.toggleDropdown}>
+                  <DropdownToggle className="btn u-color-transparent nav-links" caret>
+                    Sắp xếp
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem header>Giá</DropdownItem>
+                    <DropdownItem>Thấp -&gt; Cao</DropdownItem>
+                    <DropdownItem>Cao -&gt; Thấp</DropdownItem>
+                    <DropdownItem divider />
+                    <DropdownItem header>Ưu đãi</DropdownItem>
+                    <DropdownItem>Giảm giá</DropdownItem>
+                    <DropdownItem>Voucher</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+          </NavItem>
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
-          <CartContext>
-            <TabPane tabId="1">
-              <Row >
-                {this.state.Items.length === 0 && 'Loading....'}
-                {
-                  this.state.Items.length !== 0 && Items.map((Item, index) =>
-                    <Product Item={Item} key={Item._id} index={index}
-                      onProductClicked={this.onProductClicked}></Product>)
-                }
-              </Row>
-            </TabPane>
-            <TabPane tabId="2">
+          <TabPane tabId="1">
+            <Row >
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                this.state.Items.length !== 0 && Items.map((Item, index) =>
+                  <Product Item={Item} key={Item._id} index={index}
+                    onProductClicked={this.onProductClicked}></Product>)
+              }
+            </Row>
+          </TabPane>
+          <TabPane tabId="2">
+            <Row>
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                this.state.Items.length !== 0 && Items.map((Item, index) =>
+                  Item.featured
+                  && <Product Item={Item} key={Item._id} index={index}
+                    onProductClicked={this.onProductClicked} />)
+              }
+            </Row>
+          </TabPane>
+          <TabPane tabId="3">
+            <Row>
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                this.state.Items.length !== 0 && Items.map((Item, index) =>
+                  Item.type === PRODUCTTYPE.get(2)
+                  && <Product Item={Item} key={Item._id} index={index}
+                    onProductClicked={this.onProductClicked} />)
+              }
+            </Row>
+          </TabPane>
+          <TabPane tabId="4">
+            <Row>
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                this.state.Items.length !== 0 && Items.map((Item, index) =>
+                  Item.type === PRODUCTTYPE.get(1)
+                  && <Product Item={Item} key={Item._id} index={index}
+                    onProductClicked={this.onProductClicked} />)
+              }
+            </Row>
+          </TabPane>
+          <TabPane tabId="5">
               <Row>
-                {this.state.Items.length === 0 && 'Loading....'}
-                {
-                  this.state.Items.length !== 0 && Items.map((Item, index) =>
-                    Item.featured
-                    && <Product Item={Item} key={Item._id} index={index}
-                      onProductClicked={this.onProductClicked} />)
-                }
+
               </Row>
             </TabPane>
-            <TabPane tabId="3">
-              <Row>
-                {this.state.Items.length === 0 && 'Loading....'}
-                {
-                  this.state.Items.length !== 0 && Items.map((Item, index) =>
-                    Item.type === PRODUCTTYPE.get(2)
-                    && <Product Item={Item} key={Item._id} index={index}
-                      onProductClicked={this.onProductClicked} />)
-                }
-              </Row>
-            </TabPane>
-            <TabPane tabId="4">
-              <Row>
-                {this.state.Items.length === 0 && 'Loading....'}
-                {
-                  this.state.Items.length !== 0 && Items.map((Item, index) =>
-                    Item.type === PRODUCTTYPE.get(1)
-                    && <Product Item={Item} key={Item._id} index={index}
-                      onProductClicked={this.onProductClicked} />)
-                }
-              </Row>
-            </TabPane>
-          </CartContext>
           <Pagination
-                activePage={this.state.activePage}
-                itemsCountPerPage={Items.length}
-                totalItemsCount={TotalItems}
-                pageRangeDisplayed={3}
-                onChange={this.handlePageChange}
-                itemClass="page-item"
-                linkClass="page-link"
-              />
+            activePage={this.state.activePage}
+            itemsCountPerPage={Items.length}
+            totalItemsCount={TotalItems}
+            pageRangeDisplayed={3}
+            onChange={this.handlePageChange}
+            itemClass="page-item"
+            linkClass="page-link"
+          />
         </TabContent>
       </Container>
     );
