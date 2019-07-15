@@ -20,7 +20,7 @@ export default class Order extends Component {
         Axios.get('http://localhost:5000/api/products/all')
         .then(res => {
             const products = res.data.products;
-            const drink = products.filter(item => item.type === 'drink');
+            const drink = products.filter(item => item.type === 'drinks');
             const food = products.filter(item => item.type === 'food');
             
             this.setState({

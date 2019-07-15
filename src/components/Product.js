@@ -22,7 +22,7 @@ export default function Product(props) {
                           { ({ addToCart }) => (
                             <button className="btn btn-dark w-50 btn-sm rounded-0" onClick = {
                               () => addToCart(Item)
-                            }>Đặt hàng</button>
+                            }>Đặt hàng </button>
                           )}
                         </AppContext.Consumer>
                     </div>

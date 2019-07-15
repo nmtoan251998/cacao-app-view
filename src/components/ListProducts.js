@@ -26,8 +26,6 @@ import Pagination from 'react-js-pagination';
 import Product from './Product';
 import ProductDetail from './ProductDetail';
 
-import { CartContext } from '../contexts/CartContext';
-
 import '../../node_modules/sweetalert/dist/sweetalert.css';
 
 const PRODUCTTYPE = new Map();
@@ -75,7 +73,7 @@ export default class ListItems extends React.Component {
   }
 
   onProductClicked() {
-    Axios.patch('http://localhost:5000/api/products/:id').then((result) => {
+    Axios.get('http://localhost:5000/api/products/:id').then((result) => {
       const DescProduct = result.data;
       this.setState(() => ({
         DescProduct,
@@ -126,7 +124,7 @@ export default class ListItems extends React.Component {
     }
 
     while ((PaginationData.length !== 0)
-    && (PaginationData.length < NumberOfProductDisplayOnScreen)) {
+      && (PaginationData.length < NumberOfProductDisplayOnScreen)) {
       PaginationData.push(Items.shift());
     }
 
@@ -189,60 +187,58 @@ export default class ListItems extends React.Component {
           </NavItem>
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
-          <CartContext>
-            <TabPane tabId="1">
-              <Row >
-                {this.state.Items.length === 0 && 'Loading....'}
-                {
-                  this.state.Items.length !== 0 && Items.map((Item, index) =>
-                    <Product Item={Item} key={Item._id} index={index}
-                      onProductClicked={this.onProductClicked}></Product>)
-                }
-              </Row>
-            </TabPane>
-            <TabPane tabId="2">
-              <Row>
-                {this.state.Items.length === 0 && 'Loading....'}
-                {
-                  this.state.Items.length !== 0 && Items.map((Item, index) =>
-                    Item.featured
-                    && <Product Item={Item} key={Item._id} index={index}
-                      onProductClicked={this.onProductClicked} />)
-                }
-              </Row>
-            </TabPane>
-            <TabPane tabId="3">
-              <Row>
-                {this.state.Items.length === 0 && 'Loading....'}
-                {
-                  this.state.Items.length !== 0 && Items.map((Item, index) =>
-                    Item.type === PRODUCTTYPE.get(2)
-                    && <Product Item={Item} key={Item._id} index={index}
-                      onProductClicked={this.onProductClicked} />)
-                }
-              </Row>
-            </TabPane>
-            <TabPane tabId="4">
-              <Row>
-                {this.state.Items.length === 0 && 'Loading....'}
-                {
-                  this.state.Items.length !== 0 && Items.map((Item, index) =>
-                    Item.type === PRODUCTTYPE.get(1)
-                    && <Product Item={Item} key={Item._id} index={index}
-                      onProductClicked={this.onProductClicked} />)
-                }
-              </Row>
-            </TabPane>
-          </CartContext>
+          <TabPane tabId="1">
+            <Row >
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                this.state.Items.length !== 0 && Items.map((Item, index) =>
+                  <Product Item={Item} key={Item._id} index={index}
+                    onProductClicked={this.onProductClicked}></Product>)
+              }
+            </Row>
+          </TabPane>
+          <TabPane tabId="2">
+            <Row>
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                this.state.Items.length !== 0 && Items.map((Item, index) =>
+                  Item.featured
+                  && <Product Item={Item} key={Item._id} index={index}
+                    onProductClicked={this.onProductClicked} />)
+              }
+            </Row>
+          </TabPane>
+          <TabPane tabId="3">
+            <Row>
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                this.state.Items.length !== 0 && Items.map((Item, index) =>
+                  Item.type === PRODUCTTYPE.get(2)
+                  && <Product Item={Item} key={Item._id} index={index}
+                    onProductClicked={this.onProductClicked} />)
+              }
+            </Row>
+          </TabPane>
+          <TabPane tabId="4">
+            <Row>
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                this.state.Items.length !== 0 && Items.map((Item, index) =>
+                  Item.type === PRODUCTTYPE.get(1)
+                  && <Product Item={Item} key={Item._id} index={index}
+                    onProductClicked={this.onProductClicked} />)
+              }
+            </Row>
+          </TabPane>
           <Pagination
-                activePage={this.state.activePage}
-                itemsCountPerPage={Items.length}
-                totalItemsCount={TotalItems}
-                pageRangeDisplayed={3}
-                onChange={this.handlePageChange}
-                itemClass="page-item"
-                linkClass="page-link"
-              />
+            activePage={this.state.activePage}
+            itemsCountPerPage={Items.length}
+            totalItemsCount={TotalItems}
+            pageRangeDisplayed={3}
+            onChange={this.handlePageChange}
+            itemClass="page-item"
+            linkClass="page-link"
+          />
         </TabContent>
       </Container>
     );
