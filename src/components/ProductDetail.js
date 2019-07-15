@@ -14,9 +14,7 @@ export default function ProductDetail(props) {
               <Card >
                 <div className="position-relative ">
                     <CardImg top width="50%" src={Item.image || 'http://dummyimage.com/300x300.png/5fa2dd/ffffff'} alt="Card image cap" />
-                    <div className="btn--group position-absolute fixed-bottom d-flex justify-content-center
-
-                    " >
+                    <div className="btn--group position-absolute fixed-bottom d-flex justify-content-center" >
                     </div>
                 </div>
                 <CardBody>

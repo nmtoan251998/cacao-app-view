@@ -12,7 +12,7 @@ export default function Product(props) {
   const { Item } = props;
 
   return (
-        <Col sm="4" md="2" xs="6" className="px-1 my-1">
+        <Col sm="4" md="3" lg="2" xs="6" className="px-1 my-1">
             <Card>
                 <div className="position-relative">
                     <CardImg top width="100%" src={Item.image || 'http://dummyimage.com/300x300.png/5fa2dd/ffffff'} alt="Card image cap" />
@@ -22,7 +22,7 @@ export default function Product(props) {
                           { ({ addToCart }) => (
                             <button className="btn btn-dark w-50 btn-sm rounded-0" onClick = {
                               () => addToCart(Item)
-                            }>Đặt hàng</button>
+                            }>Đặt hàng </button>
                           )}
                         </AppContext.Consumer>
                     </div>
