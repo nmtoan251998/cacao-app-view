@@ -1,4 +1,6 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable class-methods-use-this */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable implicit-arrow-linebreak */
@@ -16,7 +18,7 @@ import {
   Dropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
 } from 'reactstrap';
 
 import SweetAlert from 'sweetalert-react';
@@ -34,7 +36,7 @@ import '../../node_modules/sweetalert/dist/sweetalert.css';
 
 const PRODUCTTYPE = new Map();
 PRODUCTTYPE.set(1, 'food');
-PRODUCTTYPE.set(2, 'drink');
+PRODUCTTYPE.set(2, 'drinks');
 
 const SCREENTYPE = new Map();
 SCREENTYPE.set('landscape_phones', 576);
@@ -51,6 +53,7 @@ export default class ListItems extends React.Component {
     this.onProductClicked = this.onProductClicked.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
     this.handlePaginatingData = this.handlePaginatingData.bind(this);
+    this.onDropdownItemClick = this.onDropdownItemClick.bind(this);
 
     this.state = {
       Items: [],
@@ -101,6 +104,25 @@ export default class ListItems extends React.Component {
     this.setState(() => ({
       activePage: pageNumber,
     }));
+  }
+
+  onDropdownItemClick(sender) {
+    const sortType = sender.currentTarget.getAttribute('dropdownvalue');
+    const { Items } = this.state;
+    switch (sortType) {
+      case 'low-to-high':
+        Items.sort((a, b) => ((a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0)));
+        this.setState(() => Items);
+        break;
+      case 'high-to-low':
+        Items.sort((a, b) => ((a.price < b.price) ? 1 : ((b.price < a.price) ? -1 : 0)));
+        this.setState(() => Items);
+        break;
+      case 'discount':
+        break;
+      default:
+        break;
+    }
   }
 
   componentDidMount() {
@@ -204,12 +226,12 @@ export default class ListItems extends React.Component {
                   </DropdownToggle>
                   <DropdownMenu>
                     <DropdownItem header>Giá</DropdownItem>
-                    <DropdownItem>Thấp -&gt; Cao</DropdownItem>
-                    <DropdownItem>Cao -&gt; Thấp</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="low-to-high">Thấp -&gt; Cao</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="high-to-low">Cao -&gt; Thấp</DropdownItem>
                     <DropdownItem divider />
                     <DropdownItem header>Ưu đãi</DropdownItem>
-                    <DropdownItem>Giảm giá</DropdownItem>
-                    <DropdownItem>Voucher</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="discount" disabled>Giảm giá</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="voucher" disabled>Voucher</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
           </NavItem>
