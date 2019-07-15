@@ -10,6 +10,8 @@ import {
     CardSubtitle
 } from "reactstrap";
 
+import { AppContext } from '../contexts/CartContext'
+
 export default class ProductCart extends Component {
     render() {
         const { Item } = this.props
@@ -21,15 +23,19 @@ export default class ProductCart extends Component {
                     </div>
                     <CardBody className="d-flex flex-column align-items-start">
                         <CardTitle>
-                            <h6>Tên sản phẩm:</h6> { Item.name }
+                            Tên sản phẩm: { Item.name }
                         </CardTitle>
                         <CardSubtitle className="text-danger" >
-                            <h6>Số lượng: {Item.units}</h6>
+                            Số lượng: {Item.units}
                         </CardSubtitle>
                         <CardText className="text-left">
-                            <h6>Nội dung sản phẩm:</h6> {Item.description}
+                            Nội dung sản phẩm: { Item.description }
                         </CardText>
-                        <Button className="mt-auto ml-auto">Xóa khỏi giỏ hàng</Button>
+                        <AppContext.Consumer>
+                            {({ removeFromCart }) => <Button onClick = {() => removeFromCart(Item)} className="mt-auto ml-auto">
+                                    Xóa khỏi giỏ hàng
+                                </Button>}
+                        </AppContext.Consumer>
                     </CardBody>
                 </Card>
             </Col>

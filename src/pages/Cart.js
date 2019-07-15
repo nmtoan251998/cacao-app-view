@@ -11,8 +11,9 @@ class Cart extends Component {
             <Container>
                 <div className="Cart-box">
                     <AppContext.Consumer>
-                        {({CartItems}) => CartItems.map(item => <ProductCart
-                        Item={item}/>)}
+                        {({CartItems}) => CartItems.map((item, index) => <ProductCart
+                        Item={item}
+                        key={index}/>)}
                     </AppContext.Consumer>
                 </div>
             </Container>
