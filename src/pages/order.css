@@ -1,9 +1,0 @@
-.products-content {
-    display: flex;
-    flex-flow: column;
-    justify-content: center;
-    align-items: center;
-    padding: 0 2rem 2rem 2rem;
-    margin: 3rem 0;
-    border: 1px solid gray;
-}
