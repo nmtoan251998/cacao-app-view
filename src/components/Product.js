@@ -5,15 +5,15 @@ import {
   Col, Card, CardImg, CardBody,
   CardTitle, CardSubtitle,
 } from 'reactstrap';
+import classNames from 'classnames';
 
 import { AppContext } from '../contexts/CartContext';
 
 export default function Product(props) {
-  const { Item } = props;
-
+  const { Item, visible } = props;
   return (
         <Col sm="4" md="3" lg="2" xs="6" className="px-1 my-1">
-            <Card>
+            <Card className={classNames({ [`${visible} noselect`]: typeof visible !== 'undefined' })}>
                 <div className="position-relative">
                     <CardImg top width="100%" src={Item.image || 'http://dummyimage.com/300x300.png/5fa2dd/ffffff'} alt="Card image cap" />
                     <div className="btn--group position-absolute fixed-bottom d-flex justify-content-center " >
@@ -42,6 +42,8 @@ Product.propTypes = {
     image: PropTypes.string,
     name: PropTypes.string.isRequired,
     price: PropTypes.string,
+    type: PropTypes.oneOf(['food', 'drinks']),
   }),
   onProductClicked: PropTypes.func,
+  visible: PropTypes.oneOf(['u-opacity-0', '']),
 };

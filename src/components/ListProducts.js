@@ -1,9 +1,12 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable class-methods-use-this */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable implicit-arrow-linebreak */
 import React from 'react';
 import Axios from 'axios';
+import classnames from 'classnames';
 
 import {
   Container,
@@ -16,13 +19,12 @@ import {
   Dropdown,
   DropdownToggle,
   DropdownMenu,
-  DropdownItem
+  DropdownItem,
 } from 'reactstrap';
 
 import SweetAlert from 'sweetalert-react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 import Pagination from 'react-js-pagination';
@@ -34,7 +36,8 @@ import '../../node_modules/sweetalert/dist/sweetalert.css';
 
 const PRODUCTTYPE = new Map();
 PRODUCTTYPE.set(1, 'food');
-PRODUCTTYPE.set(2, 'drink');
+PRODUCTTYPE.set(2, 'drinks');
+PRODUCTTYPE.set(3, 'featured');
 
 const SCREENTYPE = new Map();
 SCREENTYPE.set('landscape_phones', 576);
@@ -51,9 +54,11 @@ export default class ListItems extends React.Component {
     this.onProductClicked = this.onProductClicked.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
     this.handlePaginatingData = this.handlePaginatingData.bind(this);
+    this.onDropdownItemClick = this.onDropdownItemClick.bind(this);
 
     this.state = {
       Items: [],
+      CurrentItems: [],
       activeTab: '1',
       DescProduct: {
         _id: '000fff',
@@ -64,6 +69,7 @@ export default class ListItems extends React.Component {
         image: 'http://dummyimage.com/300x300.png/5fa2dd/ffffff',
         description: 'Loadinggg',
       },
+      CurrentDevice: 'desktops',
       showAlert: false,
       activePage: 1,
       dropdownOpen: false,
@@ -85,7 +91,7 @@ export default class ListItems extends React.Component {
   }
 
   onProductClicked() {
-    Axios.get('http://localhost:5000/api/products/:id').then((result) => {
+    Axios.get('/api/products/:id').then((result) => {
       const DescProduct = result.data;
       this.setState(() => ({
         DescProduct,
@@ -103,6 +109,25 @@ export default class ListItems extends React.Component {
     }));
   }
 
+  onDropdownItemClick(sender) {
+    const sortType = sender.currentTarget.getAttribute('dropdownvalue');
+    const { Items } = this.state;
+    switch (sortType) {
+      case 'low-to-high':
+        Items.sort((a, b) => ((a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0)));
+        this.setState(() => Items);
+        break;
+      case 'high-to-low':
+        Items.sort((a, b) => ((a.price < b.price) ? 1 : ((b.price < a.price) ? -1 : 0)));
+        this.setState(() => Items);
+        break;
+      case 'discount':
+        break;
+      default:
+        break;
+    }
+  }
+
   componentDidMount() {
     Axios.get('/api/products/all').then((result) => {
       const { products: Items } = result.data;
@@ -116,39 +141,83 @@ export default class ListItems extends React.Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  handlePaginatingData(Items = []) {
+  handlePaginatingData(Items = [], DisplayType) {
+    // console.log(Items);
     const currentScreenWidth = window.innerWidth;
     const { activePage: pageNumber } = this.state;
+    let CurrentItems = Array.from(Items);
+    let ItemsAfterFilter = [];
     let NumberOfProductDisplayOnScreen;
     let PaginationData = [];
+    switch (DisplayType) {
+      case '2':
+        CurrentItems = CurrentItems.filter(Item => Item.featured);
+        break;
+      case '3':
+        CurrentItems = CurrentItems.filter(Item => Item.type === PRODUCTTYPE.get(2));
+        break;
+      case '4':
+        CurrentItems = CurrentItems.filter(Item => Item.type === PRODUCTTYPE.get(1));
+        break;
+      default:
+        break;
+    }
+
+    ItemsAfterFilter = Array.from(CurrentItems);
+
     if (currentScreenWidth < SCREENTYPE.get('landscape_phones')) {
-      PaginationData = Items.slice(4 * (pageNumber - 1), pageNumber * 4);
+      PaginationData = CurrentItems.slice(4 * (pageNumber - 1), pageNumber * 4);
       NumberOfProductDisplayOnScreen = 4;
     } else if (currentScreenWidth < SCREENTYPE.get('tablets')) {
-      PaginationData = Items.slice(6 * (pageNumber - 1), pageNumber * 6);
+      PaginationData = CurrentItems.slice(6 * (pageNumber - 1), pageNumber * 6);
       NumberOfProductDisplayOnScreen = 6;
     } else if (currentScreenWidth < SCREENTYPE.get('large_desktops')) {
-      PaginationData = Items.slice(12 * (pageNumber - 1), pageNumber * 12);
+      PaginationData = CurrentItems.slice(12 * (pageNumber - 1), pageNumber * 12);
       NumberOfProductDisplayOnScreen = 12;
     } else {
-      PaginationData = Items.slice(14 * (pageNumber - 1), pageNumber * 14);
+      PaginationData = CurrentItems.slice(14 * (pageNumber - 1), pageNumber * 14);
       NumberOfProductDisplayOnScreen = 14;
     }
-
+    const NumberOfCurrentProduct = PaginationData.length;
     while ((PaginationData.length !== 0)
       && (PaginationData.length < NumberOfProductDisplayOnScreen)) {
-      PaginationData.push(Items.shift());
+      PaginationData.push(CurrentItems.shift());
     }
-
-    return PaginationData;
+    return { CurrentItems: PaginationData, ItemsAfterFilter, NumberOfCurrentProduct };
   }
 
+  resize() {
+    const currentScreenWidth = window.innerWidth;
+    if (currentScreenWidth < SCREENTYPE.get('landscape_phones')) {
+      this.setState(() => ({
+        CurrentDevice: 'landscape_phones',
+      }));
+    } else if (currentScreenWidth < SCREENTYPE.get('tablets')) {
+      this.setState(() => ({
+        CurrentDevice: 'tablets',
+      }));
+    } else if (currentScreenWidth < SCREENTYPE.get('large_desktops')) {
+      this.setState(() => ({
+        CurrentDevice: 'large_desktops',
+      }));
+    }
+  }
 
   render() {
-    let { Items } = this.state;
-    const TotalItems = Items.length;
+    const { Items, activeTab } = this.state;
     // Items on state not immutable
-    Items = this.handlePaginatingData(Items);
+    const {
+      CurrentItems,
+      ItemsAfterFilter,
+      NumberOfCurrentProduct,
+    } = this.handlePaginatingData(Items, activeTab);
+    // eslint-disable-next-line prefer-const
+    const TotalDisplayItems = ItemsAfterFilter.length;
+    const TotalCurrentItems = CurrentItems.length;
+    let PageRange = Math.ceil(TotalDisplayItems / TotalCurrentItems);
+    // eslint-disable-next-line no-unused-expressions
+    PageRange < 3 ? PageRange : PageRange = 3;
+    // window.onresize = this.resize.bind(this);
     return (
       <Container>
         <SweetAlert
@@ -204,56 +273,54 @@ export default class ListItems extends React.Component {
                   </DropdownToggle>
                   <DropdownMenu>
                     <DropdownItem header>Giá</DropdownItem>
-                    <DropdownItem>Thấp -&gt; Cao</DropdownItem>
-                    <DropdownItem>Cao -&gt; Thấp</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="low-to-high">Thấp -&gt; Cao</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="high-to-low">Cao -&gt; Thấp</DropdownItem>
                     <DropdownItem divider />
                     <DropdownItem header>Ưu đãi</DropdownItem>
-                    <DropdownItem>Giảm giá</DropdownItem>
-                    <DropdownItem>Voucher</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="discount" disabled>Giảm giá</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="voucher" disabled>Voucher</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
           </NavItem>
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
+          {TotalCurrentItems === 0 && 'Loading....'}
           <TabPane tabId="1">
             <Row >
-              {this.state.Items.length === 0 && 'Loading....'}
               {
-                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                  <Product Item={Item} key={Item._id} index={index}
-                    onProductClicked={this.onProductClicked}></Product>)
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                    <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
+                    onProductClicked={this.onProductClicked} />)
               }
             </Row>
           </TabPane>
           <TabPane tabId="2">
             <Row>
-              {this.state.Items.length === 0 && 'Loading....'}
               {
-                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                  Item.featured
-                  && <Product Item={Item} key={Item._id} index={index}
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                  <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
                     onProductClicked={this.onProductClicked} />)
               }
             </Row>
           </TabPane>
           <TabPane tabId="3">
             <Row>
-              {this.state.Items.length === 0 && 'Loading....'}
               {
-                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                  Item.type === PRODUCTTYPE.get(2)
-                  && <Product Item={Item} key={Item._id} index={index}
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                  <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
                     onProductClicked={this.onProductClicked} />)
               }
             </Row>
           </TabPane>
           <TabPane tabId="4">
             <Row>
-              {this.state.Items.length === 0 && 'Loading....'}
               {
-                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                  Item.type === PRODUCTTYPE.get(1)
-                  && <Product Item={Item} key={Item._id} index={index}
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                  <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
                     onProductClicked={this.onProductClicked} />)
               }
             </Row>
@@ -265,9 +332,9 @@ export default class ListItems extends React.Component {
             </TabPane>
           <Pagination
             activePage={this.state.activePage}
-            itemsCountPerPage={Items.length}
-            totalItemsCount={TotalItems}
-            pageRangeDisplayed={3}
+            itemsCountPerPage={TotalCurrentItems}
+            totalItemsCount={TotalDisplayItems}
+            pageRangeDisplayed={PageRange}
             onChange={this.handlePageChange}
             itemClass="page-item"
             linkClass="page-link"
