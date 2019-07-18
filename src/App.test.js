@@ -1,6 +1,5 @@
-/* eslint-disable no-underscore-dangle */
 /* eslint-disable linebreak-style */
-/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable no-undef */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
