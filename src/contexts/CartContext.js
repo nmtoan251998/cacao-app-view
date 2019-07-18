@@ -1,4 +1,5 @@
 /* eslint-disable linebreak-style */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -11,18 +12,44 @@ export class CartContext extends React.Component {
 
     this.state = {
       CartItems: [],
+      Count: 0
     };
 
     this.addToCart = this.addToCart.bind(this);
+    this.removeFromCart = this.removeFromCart.bind(this)
   }
 
   addToCart(item) {
     // eslint-disable-next-line arrow-body-style
-    this.setState((prevState) => {
-      return {
-        CartItems: prevState.CartItems.concat(item),
-      };
-    });
+    const existItem = this.state.CartItems.filter(x => x._id === item._id);
+    if(existItem.length > 0) {
+      const withoutItem = this.state.CartItems.filter(x => x._id !== item._id);
+      const updateItem = {...existItem[0], units: existItem[0].units + 1}
+
+      this.setState({
+        CartItems: [...withoutItem, updateItem],
+        Count: this.state.Count + 1
+      })
+    } 
+    else {
+      this.setState((prevState) => {
+        return {
+          CartItems: prevState.CartItems.concat({...item, units: 1}),
+          Count: this.state.Count + 1
+        };
+      });
+    }
+  }
+
+  removeFromCart(item) {
+    const { CartItems } = this.state;
+    const index = CartItems.indexOf(item);
+    const withoutItemBefore = CartItems.slice(0, index);
+    const withoutItemAfter = CartItems.slice(index + 1, CartItems.length);
+    this.setState({
+      CartItems: [...withoutItemBefore, ...withoutItemAfter],
+      Count: this.state.Count - CartItems[index].units 
+    })
   }
 
   render() {
@@ -30,7 +57,9 @@ export class CartContext extends React.Component {
         <AppContext.Provider value = {
             {
               CartItems: this.state.CartItems,
+              Count: this.state.Count,
               addToCart: this.addToCart,
+              removeFromCart: this.removeFromCart
             }
         }>
             { this.props.children }
@@ -41,6 +70,7 @@ export class CartContext extends React.Component {
 
 CartContext.propTypes = {
   CartItems: PropTypes.array,
+  Count: PropTypes.number,
   addToCart: PropTypes.func,
   children: PropTypes.array,
 };

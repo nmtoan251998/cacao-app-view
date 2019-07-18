@@ -4,6 +4,8 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable import/named */
+
 import React from 'react';
 import Axios from 'axios';
 import classNames from 'classnames';
@@ -130,7 +132,7 @@ export default class ListItems extends React.Component {
   }
 
   componentDidMount() {
-    Axios.get('/api/products/all').then((result) => {
+    Axios.get('http://localhost:5000/api/products/all').then((result) => {
       const { products: Items } = result.data;
       this.setState(() => ({
         Items,

@@ -1,4 +1,6 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable import/named */
+
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -72,8 +74,8 @@ class NavComponent extends Component {
                             </NavItem>
                             <NavItem>
                               <AppContext.Consumer>
-                                {({ CartItems }) => <Link className="pl-2 pr-2" to="#">
-                                  Giỏ hàng ({CartItems.length})
+                                {({ Count }) => <Link className="pl-2 pr-2" to="/gio-hang">
+                                  Giỏ hàng ({Count})
                                   </Link>}
                               </AppContext.Consumer>
                             </NavItem>

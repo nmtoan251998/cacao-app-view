@@ -1,4 +1,5 @@
 /* eslint-disable linebreak-style */
+
 import React from 'react';
 
 const AuthContext = React.createContext();
