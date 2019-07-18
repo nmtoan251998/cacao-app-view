@@ -15,6 +15,7 @@ import {
 
 import AuthContext from '../contexts/AuthContext';
 import { AppContext } from '../contexts/CartContext';
+import { ProductContext } from '../contexts/ProductContext';
 
 class NavComponent extends Component {
   constructor(props) {
@@ -47,9 +48,18 @@ class NavComponent extends Component {
     const userScreens = (
             <div className="d-flex flex-md-row pl-3 pr-3 align-items-center">
                 <NavItem>
-                <AuthContext.Consumer>
-                  {({ logout }) => <Link to="#" onClick={() => logout()} >Logout</Link>}
-                </AuthContext.Consumer>
+                  <AuthContext.Consumer>
+                    {({ user }) => {
+                      if(user !== undefined) {
+                        return <Link className="p-1 Auth-link" to="#">{user.username}</Link>
+                      }
+                    }}
+                  </AuthContext.Consumer>
+                </NavItem>
+                <NavItem>
+                  <AuthContext.Consumer>
+                    {({ logout }) => <Link className="p-1 Auth-link" to="#" onClick={() => logout()} >Logout</Link>}
+                  </AuthContext.Consumer>
                 </NavItem>
             </div>
     );
@@ -57,6 +67,21 @@ class NavComponent extends Component {
     return (
                 <Navbar color="light" light expand="md">
                     <NavbarBrand href="/">logo</NavbarBrand>
+                    <form class="form-inline my-2 my-lg-0">
+                      <ProductContext.Consumer>
+                        {({ onChange }) => {
+                          return <input 
+                          className="form-control mr-sm-2" 
+                          type="search" 
+                          placeholder="Search" 
+                          aria-label="Search"
+                          onChange = {(event) => onChange(event)}/>
+                        }}
+                      </ProductContext.Consumer>
+                      <Link to="/search" class="btn btn-danger my-2 my-sm-0" >
+                        Search
+                      </Link>
+                    </form>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         <Nav className="ml-auto" navbar>

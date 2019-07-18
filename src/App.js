@@ -7,6 +7,7 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import AuthProvider from './contexts/AuthProvider';
 import { CartContext } from './contexts/CartContext';
+import { ProductProvider } from './contexts/ProductContext';
 import Nav from './components/navbar';
 import Home from './pages/Home';
 import AuthLogin from './pages/Auth/AuthLogin';
@@ -17,18 +18,20 @@ import Cart from './pages/Cart';
 function App() {
   return (
     <AuthProvider>
-      <CartContext>
-        <Router>
-          <div className="App">
-            <Nav/>
-          </div>
-          <Route path="/" exact component={Home} />
-          <Route path="/dat-hang" exact component={ListProducts} />
-          <Route path="/gio-hang" exact component={Cart} />
-          <Route path="/auth/login" exact component={AuthLogin} />
-          <Route path="/auth/register" exact component={AuthRegister} />
-        </Router>
-      </CartContext>
+      <ProductProvider>
+        <CartContext>
+          <Router>
+            <div className="App">
+              <Nav/>
+            </div>
+            <Route path="/" exact component={Home} />
+            <Route path="/dat-hang" exact component={ListProducts} />
+            <Route path="/gio-hang" exact component={Cart} />
+            <Route path="/auth/login" exact component={AuthLogin} />
+            <Route path="/auth/register" exact component={AuthRegister} />
+          </Router>
+        </CartContext>
+      </ProductProvider>
     </AuthProvider>
   );
 }

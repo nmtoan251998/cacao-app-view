@@ -76,7 +76,7 @@ class RegisterBox extends Component {
     } else if (userRegister.password.length < 8 || userRegister.password.length > 12) {
       this.showValidationErr(undefined, undefined, 'password much be 8 to 12!', undefined);
     } else {
-      Axios.post('http://localhost:5000/auth/register', userRegister)
+      Axios.post('/auth/register', userRegister)
         .then(() => this.props.history.push('/auth/login'))
         .catch((err) => {
           if (err.response.data.error.accountExist) {
