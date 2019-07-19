@@ -67,7 +67,7 @@ class NavComponent extends Component {
     return (
                 <Navbar color="light" light expand="md">
                     <NavbarBrand href="/">logo</NavbarBrand>
-                    <form class="form-inline my-2 my-lg-0">
+                    <form className="form-inline my-2 my-lg-0">
                       <ProductContext.Consumer>
                         {({ onChange }) => {
                           return <input 
@@ -78,7 +78,7 @@ class NavComponent extends Component {
                           onChange = {(event) => onChange(event)}/>
                         }}
                       </ProductContext.Consumer>
-                      <Link to="/search" class="btn btn-danger my-2 my-sm-0" >
+                      <Link to="/search" className="btn btn-danger my-2 my-sm-0" >
                         Search
                       </Link>
                     </form>
