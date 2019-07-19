@@ -72,8 +72,8 @@ class NavComponent extends Component {
                             </NavItem>
                             <NavItem>
                               <AppContext.Consumer>
-                                {({ CartItems }) => <Link className="pl-2 pr-2" to="#">
-                                  Giỏ hàng ({CartItems.length})
+                                {({ Count }) => <Link className="pl-2 pr-2" to="/gio-hang">
+                                  Giỏ hàng ({Count})
                                   </Link>}
                               </AppContext.Consumer>
                             </NavItem>

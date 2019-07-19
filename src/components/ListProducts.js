@@ -6,7 +6,6 @@
 /* eslint-disable implicit-arrow-linebreak */
 import React from 'react';
 import Axios from 'axios';
-import classNames from 'classnames';
 
 import {
   Container,
@@ -207,11 +206,14 @@ export default class ListItems extends React.Component {
   render() {
     const { Items, activeTab } = this.state;
     // Items on state not immutable
-    const { CurrentItems, ItemsAfterFilter, NumberOfCurrentProduct } = this.handlePaginatingData(Items, activeTab);
+    const {
+      CurrentItems,
+      ItemsAfterFilter,
+      NumberOfCurrentProduct,
+    } = this.handlePaginatingData(Items, activeTab);
     // eslint-disable-next-line prefer-const
     const TotalDisplayItems = ItemsAfterFilter.length;
     console.log(NumberOfCurrentProduct);
-    
     const TotalCurrentItems = CurrentItems.length;
     let PageRange = Math.ceil(TotalDisplayItems / TotalCurrentItems);
     // eslint-disable-next-line no-unused-expressions
@@ -289,7 +291,7 @@ export default class ListItems extends React.Component {
               {
                 TotalCurrentItems !== 0
                 && CurrentItems.map((Item, index) =>
-                    <Product Item={Item} key={Item._id} index={index} visible={classNames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
+                    <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
                     onProductClicked={this.onProductClicked} />)
               }
             </Row>
@@ -299,7 +301,7 @@ export default class ListItems extends React.Component {
               {
                 TotalCurrentItems !== 0
                 && CurrentItems.map((Item, index) =>
-                  <Product Item={Item} key={Item._id} index={index} visible={classNames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
+                  <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
                     onProductClicked={this.onProductClicked} />)
               }
             </Row>
@@ -309,7 +311,7 @@ export default class ListItems extends React.Component {
               {
                 TotalCurrentItems !== 0
                 && CurrentItems.map((Item, index) =>
-                  <Product Item={Item} key={Item._id} index={index} visible={classNames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
+                  <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
                     onProductClicked={this.onProductClicked} />)
               }
             </Row>
@@ -319,7 +321,7 @@ export default class ListItems extends React.Component {
               {
                 TotalCurrentItems !== 0
                 && CurrentItems.map((Item, index) =>
-                  <Product Item={Item} key={Item._id} index={index} visible={classNames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
+                  <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
                     onProductClicked={this.onProductClicked} />)
               }
             </Row>
