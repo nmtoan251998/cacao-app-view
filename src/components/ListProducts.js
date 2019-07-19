@@ -63,7 +63,7 @@ export default class ListItems extends React.Component {
       DescProduct: {
         _id: '000fff',
         name: 'Loading...',
-        price: 1,
+        price: 100,
         type: 'Loading...',
         featured: false,
         image: 'http://dummyimage.com/300x300.png/5fa2dd/ffffff',
