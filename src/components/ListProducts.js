@@ -169,10 +169,22 @@ export default class ListItems extends React.Component {
 
 
   render() {
-    let { Items } = this.state;
+    const { Items, activeTab } = this.state;
     const TotalItems = Items.length;
     // Items on state not immutable
-    Items = this.handlePaginatingData(Items);
+    const {
+      CurrentItems,
+      ItemsAfterFilter,
+      NumberOfCurrentProduct,
+    } = this.handlePaginatingData(Items, activeTab);
+    // eslint-disable-next-line prefer-const
+    const TotalDisplayItems = ItemsAfterFilter.length;
+    console.log(NumberOfCurrentProduct);
+    const TotalCurrentItems = CurrentItems.length;
+    let PageRange = Math.ceil(TotalDisplayItems / TotalCurrentItems);
+    // eslint-disable-next-line no-unused-expressions
+    PageRange < 3 ? PageRange : PageRange = 3;
+    // window.onresize = this.resize.bind(this);
     return (
       <Container>
         <SweetAlert
@@ -243,9 +255,10 @@ export default class ListItems extends React.Component {
             <Row >
               {this.state.Items.length === 0 && 'Loading....'}
               {
-                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                  <Product Item={Item} key={Item._id} index={index}
-                    onProductClicked={this.onProductClicked}></Product>)
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                    <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
+                    onProductClicked={this.onProductClicked} />)
               }
             </Row>
           </TabPane>
@@ -253,9 +266,9 @@ export default class ListItems extends React.Component {
             <Row>
               {this.state.Items.length === 0 && 'Loading....'}
               {
-                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                  Item.featured
-                  && <Product Item={Item} key={Item._id} index={index}
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                  <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
                     onProductClicked={this.onProductClicked} />)
               }
             </Row>
@@ -264,9 +277,9 @@ export default class ListItems extends React.Component {
             <Row>
               {this.state.Items.length === 0 && 'Loading....'}
               {
-                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                  Item.type === PRODUCTTYPE.get(2)
-                  && <Product Item={Item} key={Item._id} index={index}
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                  <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
                     onProductClicked={this.onProductClicked} />)
               }
             </Row>
@@ -275,9 +288,9 @@ export default class ListItems extends React.Component {
             <Row>
               {this.state.Items.length === 0 && 'Loading....'}
               {
-                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                  Item.type === PRODUCTTYPE.get(1)
-                  && <Product Item={Item} key={Item._id} index={index}
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                  <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
                     onProductClicked={this.onProductClicked} />)
               }
             </Row>
