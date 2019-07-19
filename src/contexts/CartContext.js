@@ -10,24 +10,20 @@ export class CartContext extends React.Component {
   constructor() {
     super();
 
-    let CartItems;
-
     let Cart = localStorage.getItem('cart');
     let Count = localStorage.getItem('count');
 
-    if(Cart) {
-      CartItems = JSON.parse(Cart)
-    } else {
-      localStorage.setItem('cart', '')
-    }
+    if(!Cart) {
+      localStorage.setItem('cart', '[]')
+    } 
 
     if(!Count) {
-      localStorage.setItem('count', 0) 
-    }
+      localStorage.setItem('count', '0') 
+    } 
 
     this.state = {
-      CartItems,
-      Count,
+      CartItems: JSON.parse(Cart) || [],
+      Count: JSON.parse(Count) || 0,
     };
 
     this.addToCart = this.addToCart.bind(this);
