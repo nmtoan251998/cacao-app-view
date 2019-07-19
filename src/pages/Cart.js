@@ -1,3 +1,9 @@
+/* eslint-disable linebreak-style */
+/* eslint-disable no-param-reassign */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable eol-last */
+/* eslint-disable import/named */
 import React, { Component } from 'react';
 import { Container } from 'reactstrap';
 

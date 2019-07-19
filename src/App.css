@@ -24,16 +24,3 @@ body{
 .u-color-transparent:hover{
   border-color: #e9ecef #e9ecef #dee2e6 !important;
 }
-
-/* PRODUCT-PAGE */
-.u-opacity-0{
-  opacity: 0;
-}
-
-.noselect{
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  -o-user-select: none;
-  user-select: none;  
-}

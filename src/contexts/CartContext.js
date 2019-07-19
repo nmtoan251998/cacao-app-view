@@ -1,4 +1,5 @@
 /* eslint-disable linebreak-style */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -15,6 +16,7 @@ export class CartContext extends React.Component {
     };
 
     this.addToCart = this.addToCart.bind(this);
+    this.removeFromCart = this.removeFromCart.bind(this)
   }
 
   addToCart(item) {
@@ -41,6 +43,17 @@ export class CartContext extends React.Component {
     }
   }
 
+  removeFromCart(item) {
+    const { CartItems } = this.state;
+    const index = CartItems.indexOf(item);
+    const withoutItemBefore = CartItems.slice(0, index);
+    const withoutItemAfter = CartItems.slice(index + 1, CartItems.length);
+    this.setState({
+      CartItems: [...withoutItemBefore, ...withoutItemAfter],
+      Count: this.state.Count - CartItems[index].units 
+    })
+  }
+
   render() {
     return (
         <AppContext.Provider value = {
@@ -48,6 +61,7 @@ export class CartContext extends React.Component {
               CartItems: this.state.CartItems,
               Count: this.state.Count,
               addToCart: this.addToCart,
+              removeFromCart: this.removeFromCart
             }
         }>
             { this.props.children }
