@@ -13,7 +13,7 @@ import Home from './pages/Home';
 import Search from './pages/Search';
 import AuthLogin from './pages/Auth/AuthLogin';
 import AuthRegister from './pages/Auth/AuthRegister';
-import ListProducts from './components/ListProducts';
+import Order from './pages/Order';
 import Cart from './pages/Cart';
 
 function App() {
