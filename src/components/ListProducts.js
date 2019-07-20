@@ -1,4 +1,7 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable class-methods-use-this */
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable import/named */
@@ -35,7 +38,7 @@ import '../../node_modules/sweetalert/dist/sweetalert.css';
 
 const PRODUCTTYPE = new Map();
 PRODUCTTYPE.set(1, 'food');
-PRODUCTTYPE.set(2, 'drink');
+PRODUCTTYPE.set(2, 'drinks');
 
 const SCREENTYPE = new Map();
 SCREENTYPE.set('landscape_phones', 576);
@@ -52,6 +55,7 @@ export default class ListItems extends React.Component {
     this.onProductClicked = this.onProductClicked.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
     this.handlePaginatingData = this.handlePaginatingData.bind(this);
+    this.onDropdownItemClick = this.onDropdownItemClick.bind(this);
 
     this.state = {
       Items: [],
@@ -104,6 +108,25 @@ export default class ListItems extends React.Component {
     }));
   }
 
+  onDropdownItemClick(sender) {
+    const sortType = sender.currentTarget.getAttribute('dropdownvalue');
+    const { Items } = this.state;
+    switch (sortType) {
+      case 'low-to-high':
+        Items.sort((a, b) => ((a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0)));
+        this.setState(() => Items);
+        break;
+      case 'high-to-low':
+        Items.sort((a, b) => ((a.price < b.price) ? 1 : ((b.price < a.price) ? -1 : 0)));
+        this.setState(() => Items);
+        break;
+      case 'discount':
+        break;
+      default:
+        break;
+    }
+  }
+
   componentDidMount() {
     Axios.get('/api/products/all').then((result) => {
       const { products: Items } = result.data;
@@ -146,10 +169,22 @@ export default class ListItems extends React.Component {
 
 
   render() {
-    let { Items } = this.state;
+    const { Items, activeTab } = this.state;
     const TotalItems = Items.length;
     // Items on state not immutable
-    Items = this.handlePaginatingData(Items);
+    const {
+      CurrentItems,
+      ItemsAfterFilter,
+      NumberOfCurrentProduct,
+    } = this.handlePaginatingData(Items, activeTab);
+    // eslint-disable-next-line prefer-const
+    const TotalDisplayItems = ItemsAfterFilter.length;
+    console.log(NumberOfCurrentProduct);
+    const TotalCurrentItems = CurrentItems.length;
+    let PageRange = Math.ceil(TotalDisplayItems / TotalCurrentItems);
+    // eslint-disable-next-line no-unused-expressions
+    PageRange < 3 ? PageRange : PageRange = 3;
+    // window.onresize = this.resize.bind(this);
     return (
       <Container>
         <SweetAlert
@@ -205,12 +240,12 @@ export default class ListItems extends React.Component {
                   </DropdownToggle>
                   <DropdownMenu>
                     <DropdownItem header>Giá</DropdownItem>
-                    <DropdownItem>Thấp -&gt; Cao</DropdownItem>
-                    <DropdownItem>Cao -&gt; Thấp</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="low-to-high">Thấp -&gt; Cao</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="high-to-low">Cao -&gt; Thấp</DropdownItem>
                     <DropdownItem divider />
                     <DropdownItem header>Ưu đãi</DropdownItem>
-                    <DropdownItem>Giảm giá</DropdownItem>
-                    <DropdownItem>Voucher</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="discount" disabled>Giảm giá</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="voucher" disabled>Voucher</DropdownItem>
                   </DropdownMenu>
                 </Dropdown>
           </NavItem>
@@ -220,9 +255,10 @@ export default class ListItems extends React.Component {
             <Row >
               {this.state.Items.length === 0 && 'Loading....'}
               {
-                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                  <Product Item={Item} key={Item._id} index={index}
-                    onProductClicked={this.onProductClicked}></Product>)
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                    <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
+                    onProductClicked={this.onProductClicked} />)
               }
             </Row>
           </TabPane>
@@ -230,9 +266,9 @@ export default class ListItems extends React.Component {
             <Row>
               {this.state.Items.length === 0 && 'Loading....'}
               {
-                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                  Item.featured
-                  && <Product Item={Item} key={Item._id} index={index}
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                  <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
                     onProductClicked={this.onProductClicked} />)
               }
             </Row>
@@ -241,9 +277,9 @@ export default class ListItems extends React.Component {
             <Row>
               {this.state.Items.length === 0 && 'Loading....'}
               {
-                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                  Item.type === PRODUCTTYPE.get(2)
-                  && <Product Item={Item} key={Item._id} index={index}
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                  <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
                     onProductClicked={this.onProductClicked} />)
               }
             </Row>
@@ -252,9 +288,9 @@ export default class ListItems extends React.Component {
             <Row>
               {this.state.Items.length === 0 && 'Loading....'}
               {
-                this.state.Items.length !== 0 && Items.map((Item, index) =>
-                  Item.type === PRODUCTTYPE.get(1)
-                  && <Product Item={Item} key={Item._id} index={index}
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                  <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
                     onProductClicked={this.onProductClicked} />)
               }
             </Row>
