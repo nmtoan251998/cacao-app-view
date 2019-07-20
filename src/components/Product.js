@@ -11,7 +11,7 @@ import {
 import { AppContext } from '../contexts/CartContext';
 
 export default function Product(props) {
-  const { Item } = props;
+  const { Item, visible } = props;
 
   return (
         <Col sm="4" md="3" lg="2" xs="6" className="px-1 my-1">
