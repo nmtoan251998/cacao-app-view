@@ -90,7 +90,7 @@ export default class ListItems extends React.Component {
   }
 
   onProductClicked() {
-    Axios.get('http://localhost:5000/api/products/:id').then((result) => {
+    Axios.get('/api/products/:id').then((result) => {
       const DescProduct = result.data;
       this.setState(() => ({
         DescProduct,
@@ -128,7 +128,7 @@ export default class ListItems extends React.Component {
   }
 
   componentDidMount() {
-    Axios.get('http://localhost:5000/api/products/all').then((result) => {
+    Axios.get('/api/products/all').then((result) => {
       const { products: Items } = result.data;
       this.setState(() => ({
         Items,

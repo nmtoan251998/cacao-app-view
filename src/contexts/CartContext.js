@@ -10,9 +10,24 @@ export class CartContext extends React.Component {
   constructor() {
     super();
 
+    let CartItems;
+
+    let Cart = localStorage.getItem('cart');
+    let Count = localStorage.getItem('count');
+
+    if(Cart) {
+      CartItems = JSON.parse(Cart)
+    } else {
+      localStorage.setItem('cart', '')
+    }
+
+    if(!Count) {
+      localStorage.setItem('count', 0) 
+    }
+
     this.state = {
-      CartItems: [],
-      Count: 0
+      CartItems,
+      Count,
     };
 
     this.addToCart = this.addToCart.bind(this);
@@ -55,6 +70,8 @@ export class CartContext extends React.Component {
   }
 
   render() {
+    localStorage.cart = JSON.stringify(this.state.CartItems);
+    localStorage.count = this.state.Count;
     return (
         <AppContext.Provider value = {
             {
