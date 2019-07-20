@@ -77,7 +77,7 @@ class NavComponent extends Component {
                           aria-label="Search"
                           onChange = { event => onChange(event) }/>}
                       </ProductContext.Consumer>
-                      <Link to="/search" class="btn btn-danger my-2 my-sm-0" >
+                      <Link to="/search" className="btn btn-danger my-2 my-sm-0" >
                         Search
                       </Link>
                     </form>

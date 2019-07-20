@@ -10,6 +10,7 @@ import { CartContext } from './contexts/CartContext';
 import { ProductProvider } from './contexts/ProductContext';
 import Nav from './components/navbar';
 import Home from './pages/Home';
+import Search from './pages/Search';
 import AuthLogin from './pages/Auth/AuthLogin';
 import AuthRegister from './pages/Auth/AuthRegister';
 import Order from './pages/Order';
@@ -25,7 +26,8 @@ function App() {
               <Nav/>
             </div>
             <Route path="/" exact component={Home} />
-            <Route path="/dat-hang" exact component={Order} />
+            <Route path="/search" component={Search}/>
+            <Route path="/dat-hang" exact component={ListProducts} />
             <Route path="/gio-hang" exact component={Cart} />
             <Route path="/auth/login" exact component={AuthLogin} />
             <Route path="/auth/register" exact component={AuthRegister} />
