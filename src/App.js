@@ -27,7 +27,7 @@ function App() {
             </div>
             <Route path="/" exact component={Home} />
             <Route path="/search" component={Search}/>
-            <Route path="/dat-hang" exact component={ListProducts} />
+            <Route path="/dat-hang" exact component={Order} />
             <Route path="/gio-hang" exact component={Cart} />
             <Route path="/auth/login" exact component={AuthLogin} />
             <Route path="/auth/register" exact component={AuthRegister} />
