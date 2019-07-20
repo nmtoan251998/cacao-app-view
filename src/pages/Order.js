@@ -31,8 +31,8 @@ import PropTypes from 'prop-types';
 
 import Pagination from 'react-js-pagination';
 
-import Product from './Product';
-import ProductDetail from './ProductDetail';
+import Product from '../components/Product';
+import ProductDetail from '../components/ProductDetail';
 
 import '../../node_modules/sweetalert/dist/sweetalert.css';
 
