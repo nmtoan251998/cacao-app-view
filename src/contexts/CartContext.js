@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import Axios from 'axios';
 
 export const AppContext = React.createContext();
 
@@ -24,10 +24,27 @@ export class CartContext extends React.Component {
     this.state = {
       CartItems: JSON.parse(Cart) || [],
       Count: JSON.parse(Count) || 0,
+      Related: [],
     };
 
     this.addToCart = this.addToCart.bind(this);
     this.removeFromCart = this.removeFromCart.bind(this)
+  }
+
+  related(item) {
+    //find type of item to related
+    let type = item.type;
+    Axios.get('/api/products/all')
+      .then((res) => {
+        const data = res.data.products.filter((x) => {
+          return x.type === type
+        });
+
+        const randomIndex = Math.round(Math.random() * (data.length - 4));
+        this.setState({
+          Related: data.slice(randomIndex, randomIndex + 4),
+        })
+      });
   }
 
   addToCart(item) {
@@ -52,6 +69,8 @@ export class CartContext extends React.Component {
         };
       });
     }
+
+    this.related(item)
   }
 
   removeFromCart(item) {
@@ -72,6 +91,7 @@ export class CartContext extends React.Component {
         <AppContext.Provider value = {
             {
               CartItems: this.state.CartItems,
+              Related: this.state.Related,
               Count: this.state.Count,
               addToCart: this.addToCart,
               removeFromCart: this.removeFromCart
