@@ -4,26 +4,26 @@
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable eol-last */
 /* eslint-disable import/named */
-import React, { Component } from 'react';
+/* eslint-disable indent */
+/* eslint-disable  arrow-body-style */
+
+import React from 'react';
 import { Container } from 'reactstrap';
 
 import { AppContext } from '../contexts/CartContext';
 import ProductCart from '../components/ProductCart';
-import './Cart.css'
+import './Cart.css';
 
-class Cart extends Component {
-    render() {
-        return(
+export default function Cart() {
+        return (
             <Container>
                 <div className="Cart-box">
                     <AppContext.Consumer>
-                        {({CartItems}) => CartItems.map(item => <ProductCart
-                        Item={item}/>)}
+                        {({ CartItems }) => CartItems.map((item, index) => {
+                            return <ProductCart key={index} Item={item}/>;
+                        })}
                     </AppContext.Consumer>
                 </div>
             </Container>
-        )
-    }
+        );
 }
-
-export default Cart;

@@ -171,6 +171,7 @@ export default class ListItems extends React.Component {
   render() {
     const { Items, activeTab } = this.state;
     const TotalItems = Items.length;
+    console.log(Items)
     // Items on state not immutable
     const {
       CurrentItems,
