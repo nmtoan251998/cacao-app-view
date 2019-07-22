@@ -15,6 +15,7 @@ import AuthLogin from './pages/Auth/AuthLogin';
 import AuthRegister from './pages/Auth/AuthRegister';
 import Order from './pages/Order';
 import Cart from './pages/Cart';
+import AddProduct from './pages/AddProduct';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             <Route path="/gio-hang" exact component={Cart} />
             <Route path="/auth/login" exact component={AuthLogin} />
             <Route path="/auth/register" exact component={AuthRegister} />
+            <Route path="/add" exact component={AddProduct} />
           </Router>
         </CartContext>
       </ProductProvider>
