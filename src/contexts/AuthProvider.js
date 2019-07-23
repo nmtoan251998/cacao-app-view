@@ -10,7 +10,7 @@ export default class AuthProvider extends React.Component {
   constructor(props) {
     super(props);
     let isLogedIn = true;
-    let token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       isLogedIn = false;
     }
@@ -31,16 +31,16 @@ export default class AuthProvider extends React.Component {
 
   componentDidMount() {
     Axios.get('/api/users', {
-            headers: {
-              authorization: this.state.token,
-            },
-          })
-            .then(response => {
-              this.setState({
-                user: response.data.user,
-                isLogedIn: true,
-              })
-            })
+      headers: {
+        authorization: this.state.token,
+      },
+    })
+      .then((response) => {
+        this.setState({
+          user: response.data.user,
+          isLogedIn: true,
+        });
+      });
   }
 
   logout() {
@@ -81,14 +81,14 @@ export default class AuthProvider extends React.Component {
               authorization: res.data.token,
             },
           })
-            .then(response => {
+            .then((response) => {
               this.setState({
                 user: response.data.user,
                 isLogedIn: true,
-              })
-            })
-          })
-          .catch(err => this.showValidationErr(err.response.data.error.wrongAccount, ''));
+              });
+            });
+        })
+        .catch(err => this.showValidationErr(err.response.data.error.wrongAccount, ''));
     }
   }
 

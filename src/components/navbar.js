@@ -1,5 +1,10 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable consistent-return */
 /* eslint-disable import/named */
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable consistent-return */
+/* eslint-disable arrow-body-style */
+/* eslint-disable arrow-parens */
 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
@@ -50,8 +55,10 @@ class NavComponent extends Component {
                 <NavItem>
                   <AuthContext.Consumer>
                     {({ user }) => {
-                      if(user !== undefined) {
-                        return <Link className="p-1 Auth-link" to="#">{user.username}</Link>
+                      if (user !== undefined) {
+                        return ( 
+                          <Link className="p-1 Auth-link" to="#">{user.username}</Link>
+                        );
                       }
                     }}
                   </AuthContext.Consumer>
@@ -67,16 +74,15 @@ class NavComponent extends Component {
     return (
                 <Navbar color="light" light expand="md">
                     <NavbarBrand href="/">logo</NavbarBrand>
-                    <form className="form-inline my-2 my-lg-0">
+                    <form classNames="form-inline my-2 my-lg-0">
                       <ProductContext.Consumer>
-                        {({ onChange }) => {
-                          return <input 
-                          className="form-control mr-sm-2" 
-                          type="search" 
-                          placeholder="Search" 
+                        {({ onChange }) => <input
+                          className="form-control mr-sm-2"
+                          type="search"
+                          placeholder="Search"
                           aria-label="Search"
                           onChange = {(event) => onChange(event)}/>
-                        }}
+                        }
                       </ProductContext.Consumer>
                       <Link to="/search" className="btn btn-danger my-2 my-sm-0" >
                         Search

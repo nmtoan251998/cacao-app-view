@@ -3,3 +3,10 @@
     flex-flow: column;
     padding: 2rem
 }
+
+.Related-products {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-around;
+    align-items: center;
+}

@@ -1,20 +1,21 @@
 /* eslint-disable linebreak-style */
-import React from 'react';
-import PropTypes from 'prop-types';
-import {
-  Col, Card, CardImg, CardBody,
-  CardTitle, CardSubtitle,
-} from 'reactstrap';
-import classNames from 'classnames';
+/* eslint-disable import/named */
+/* eslint-disable react/prop-types */
+/* eslint-disable eol-last */
 
-// eslint-disable-next-line import/named
+import React from 'react';
+import {
+  Col, Card, CardImg,
+} from 'reactstrap';
+
 import { AppContext } from '../contexts/CartContext';
 
-export default function Product(props) {
-  const { Item, visible } = props;
+export default function RelatedCard(props) {
+  const { Item } = props;
+
   return (
         <Col sm="4" md="3" lg="2" xs="6" className="px-1 my-1">
-            <Card className={classNames({ [`${visible} noselect`]: typeof visible !== 'undefined' })}>
+            <Card>
                 <div className="position-relative">
                     <CardImg top width="100%" src={Item.image || 'http://dummyimage.com/300x300.png/5fa2dd/ffffff'} alt="Card image cap" />
                     <div className="btn--group position-absolute fixed-bottom d-flex justify-content-center " >
@@ -28,23 +29,7 @@ export default function Product(props) {
                         </AppContext.Consumer>
                     </div>
                 </div>
-                <CardBody>
-                    <CardTitle>{Item.name}</CardTitle>
-                    <CardSubtitle>{Item.price}</CardSubtitle>
-                </CardBody>
             </Card>
         </Col>
   );
 }
-
-Product.propTypes = {
-  Item: PropTypes.shape({
-    _id: PropTypes.string.isRequired,
-    image: PropTypes.string,
-    name: PropTypes.string.isRequired,
-    price: PropTypes.string,
-    type: PropTypes.oneOf(['food', 'drinks']),
-  }),
-  onProductClicked: PropTypes.func,
-  visible: PropTypes.oneOf(['u-opacity-0', '']),
-};
