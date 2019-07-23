@@ -4,10 +4,9 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable implicit-arrow-linebreak */
-/* eslint-disable import/named */
-
 import React from 'react';
 import Axios from 'axios';
+import classnames from 'classnames';
 
 import {
   Container,
@@ -26,19 +25,19 @@ import {
 import SweetAlert from 'sweetalert-react';
 import { renderToStaticMarkup } from 'react-dom/server';
 
-import classnames from 'classnames';
 import PropTypes from 'prop-types';
 
 import Pagination from 'react-js-pagination';
 
-import Product from './Product';
-import ProductDetail from './ProductDetail';
+import Product from '../components/Product';
+import ProductDetail from '../components/ProductDetail';
 
 import '../../node_modules/sweetalert/dist/sweetalert.css';
 
 const PRODUCTTYPE = new Map();
 PRODUCTTYPE.set(1, 'food');
 PRODUCTTYPE.set(2, 'drinks');
+PRODUCTTYPE.set(3, 'featured');
 
 const SCREENTYPE = new Map();
 SCREENTYPE.set('landscape_phones', 576);
@@ -59,16 +58,18 @@ export default class ListItems extends React.Component {
 
     this.state = {
       Items: [],
+      CurrentItems: [],
       activeTab: '1',
       DescProduct: {
         _id: '000fff',
         name: 'Loading...',
-        price: 1,
+        price: 100,
         type: 'Loading...',
         featured: false,
         image: 'http://dummyimage.com/300x300.png/5fa2dd/ffffff',
         description: 'Loadinggg',
       },
+      CurrentDevice: 'desktops',
       showAlert: false,
       activePage: 1,
       dropdownOpen: false,
@@ -140,37 +141,70 @@ export default class ListItems extends React.Component {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  handlePaginatingData(Items = []) {
+  handlePaginatingData(Items = [], DisplayType) {
+    // console.log(Items);
     const currentScreenWidth = window.innerWidth;
     const { activePage: pageNumber } = this.state;
+    let CurrentItems = Array.from(Items);
+    let ItemsAfterFilter = [];
     let NumberOfProductDisplayOnScreen;
     let PaginationData = [];
+    switch (DisplayType) {
+      case '2':
+        CurrentItems = CurrentItems.filter(Item => Item.featured);
+        break;
+      case '3':
+        CurrentItems = CurrentItems.filter(Item => Item.type === PRODUCTTYPE.get(2));
+        break;
+      case '4':
+        CurrentItems = CurrentItems.filter(Item => Item.type === PRODUCTTYPE.get(1));
+        break;
+      default:
+        break;
+    }
+
+    ItemsAfterFilter = Array.from(CurrentItems);
+
     if (currentScreenWidth < SCREENTYPE.get('landscape_phones')) {
-      PaginationData = Items.slice(4 * (pageNumber - 1), pageNumber * 4);
+      PaginationData = CurrentItems.slice(4 * (pageNumber - 1), pageNumber * 4);
       NumberOfProductDisplayOnScreen = 4;
     } else if (currentScreenWidth < SCREENTYPE.get('tablets')) {
-      PaginationData = Items.slice(6 * (pageNumber - 1), pageNumber * 6);
+      PaginationData = CurrentItems.slice(6 * (pageNumber - 1), pageNumber * 6);
       NumberOfProductDisplayOnScreen = 6;
     } else if (currentScreenWidth < SCREENTYPE.get('large_desktops')) {
-      PaginationData = Items.slice(12 * (pageNumber - 1), pageNumber * 12);
+      PaginationData = CurrentItems.slice(12 * (pageNumber - 1), pageNumber * 12);
       NumberOfProductDisplayOnScreen = 12;
     } else {
-      PaginationData = Items.slice(14 * (pageNumber - 1), pageNumber * 14);
+      PaginationData = CurrentItems.slice(14 * (pageNumber - 1), pageNumber * 14);
       NumberOfProductDisplayOnScreen = 14;
     }
-
+    const NumberOfCurrentProduct = PaginationData.length;
     while ((PaginationData.length !== 0)
       && (PaginationData.length < NumberOfProductDisplayOnScreen)) {
-      PaginationData.push(Items.shift());
+      PaginationData.push(CurrentItems.shift());
     }
-
-    return PaginationData;
+    return { CurrentItems: PaginationData, ItemsAfterFilter, NumberOfCurrentProduct };
   }
 
+  resize() {
+    const currentScreenWidth = window.innerWidth;
+    if (currentScreenWidth < SCREENTYPE.get('landscape_phones')) {
+      this.setState(() => ({
+        CurrentDevice: 'landscape_phones',
+      }));
+    } else if (currentScreenWidth < SCREENTYPE.get('tablets')) {
+      this.setState(() => ({
+        CurrentDevice: 'tablets',
+      }));
+    } else if (currentScreenWidth < SCREENTYPE.get('large_desktops')) {
+      this.setState(() => ({
+        CurrentDevice: 'large_desktops',
+      }));
+    }
+  }
 
   render() {
     const { Items, activeTab } = this.state;
-    const TotalItems = Items.length;
     // Items on state not immutable
     const {
       CurrentItems,
@@ -179,7 +213,6 @@ export default class ListItems extends React.Component {
     } = this.handlePaginatingData(Items, activeTab);
     // eslint-disable-next-line prefer-const
     const TotalDisplayItems = ItemsAfterFilter.length;
-    console.log(NumberOfCurrentProduct);
     const TotalCurrentItems = CurrentItems.length;
     let PageRange = Math.ceil(TotalDisplayItems / TotalCurrentItems);
     // eslint-disable-next-line no-unused-expressions
@@ -251,9 +284,9 @@ export default class ListItems extends React.Component {
           </NavItem>
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
+          {TotalCurrentItems === 0 && 'Loading....'}
           <TabPane tabId="1">
             <Row >
-              {this.state.Items.length === 0 && 'Loading....'}
               {
                 TotalCurrentItems !== 0
                 && CurrentItems.map((Item, index) =>
@@ -264,7 +297,6 @@ export default class ListItems extends React.Component {
           </TabPane>
           <TabPane tabId="2">
             <Row>
-              {this.state.Items.length === 0 && 'Loading....'}
               {
                 TotalCurrentItems !== 0
                 && CurrentItems.map((Item, index) =>
@@ -275,7 +307,6 @@ export default class ListItems extends React.Component {
           </TabPane>
           <TabPane tabId="3">
             <Row>
-              {this.state.Items.length === 0 && 'Loading....'}
               {
                 TotalCurrentItems !== 0
                 && CurrentItems.map((Item, index) =>
@@ -286,7 +317,6 @@ export default class ListItems extends React.Component {
           </TabPane>
           <TabPane tabId="4">
             <Row>
-              {this.state.Items.length === 0 && 'Loading....'}
               {
                 TotalCurrentItems !== 0
                 && CurrentItems.map((Item, index) =>
@@ -302,9 +332,9 @@ export default class ListItems extends React.Component {
             </TabPane>
           <Pagination
             activePage={this.state.activePage}
-            itemsCountPerPage={Items.length}
-            totalItemsCount={TotalItems}
-            pageRangeDisplayed={3}
+            itemsCountPerPage={TotalCurrentItems}
+            totalItemsCount={TotalDisplayItems}
+            pageRangeDisplayed={PageRange}
             onChange={this.handlePageChange}
             itemClass="page-item"
             linkClass="page-link"
