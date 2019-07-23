@@ -1,7 +1,11 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable class-methods-use-this */
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable implicit-arrow-linebreak */
+/* eslint-disable import/named */
+
 import React from 'react';
 import Axios from 'axios';
 
@@ -13,6 +17,10 @@ import {
   NavItem,
   NavLink,
   Row,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from 'reactstrap';
 
 import SweetAlert from 'sweetalert-react';
@@ -26,13 +34,11 @@ import Pagination from 'react-js-pagination';
 import Product from './Product';
 import ProductDetail from './ProductDetail';
 
-import { CartContext } from '../contexts/CartContext';
-
 import '../../node_modules/sweetalert/dist/sweetalert.css';
 
 const PRODUCTTYPE = new Map();
 PRODUCTTYPE.set(1, 'food');
-PRODUCTTYPE.set(2, 'drink');
+PRODUCTTYPE.set(2, 'drinks');
 
 const SCREENTYPE = new Map();
 SCREENTYPE.set('landscape_phones', 576);
@@ -43,11 +49,13 @@ export default class ListItems extends React.Component {
   constructor() {
     super();
 
-    this.toggle = this.toggle.bind(this);
+    this.toggleNav = this.toggleNav.bind(this);
+    this.toggleDropdown = this.toggleDropdown.bind(this);
 
     this.onProductClicked = this.onProductClicked.bind(this);
     this.handlePageChange = this.handlePageChange.bind(this);
     this.handlePaginatingData = this.handlePaginatingData.bind(this);
+    this.onDropdownItemClick = this.onDropdownItemClick.bind(this);
 
     this.state = {
       Items: [],
@@ -63,10 +71,11 @@ export default class ListItems extends React.Component {
       },
       showAlert: false,
       activePage: 1,
+      dropdownOpen: false,
     };
   }
 
-  toggle(tab) {
+  toggleNav(tab) {
     if (this.state.activeTab !== tab) {
       this.setState({
         activeTab: tab,
@@ -74,8 +83,14 @@ export default class ListItems extends React.Component {
     }
   }
 
+  toggleDropdown() {
+    this.setState(prevState => ({
+      dropdownOpen: !prevState.dropdownOpen,
+    }));
+  }
+
   onProductClicked() {
-    Axios.patch('http://localhost:5000/api/products/:id').then((result) => {
+    Axios.get('/api/products/:id').then((result) => {
       const DescProduct = result.data;
       this.setState(() => ({
         DescProduct,
@@ -91,6 +106,25 @@ export default class ListItems extends React.Component {
     this.setState(() => ({
       activePage: pageNumber,
     }));
+  }
+
+  onDropdownItemClick(sender) {
+    const sortType = sender.currentTarget.getAttribute('dropdownvalue');
+    const { Items } = this.state;
+    switch (sortType) {
+      case 'low-to-high':
+        Items.sort((a, b) => ((a.price > b.price) ? 1 : ((b.price > a.price) ? -1 : 0)));
+        this.setState(() => Items);
+        break;
+      case 'high-to-low':
+        Items.sort((a, b) => ((a.price < b.price) ? 1 : ((b.price < a.price) ? -1 : 0)));
+        this.setState(() => Items);
+        break;
+      case 'discount':
+        break;
+      default:
+        break;
+    }
   }
 
   componentDidMount() {
@@ -126,7 +160,7 @@ export default class ListItems extends React.Component {
     }
 
     while ((PaginationData.length !== 0)
-    && (PaginationData.length < NumberOfProductDisplayOnScreen)) {
+      && (PaginationData.length < NumberOfProductDisplayOnScreen)) {
       PaginationData.push(Items.shift());
     }
 
@@ -135,10 +169,22 @@ export default class ListItems extends React.Component {
 
 
   render() {
-    let { Items } = this.state;
+    const { Items, activeTab } = this.state;
     const TotalItems = Items.length;
     // Items on state not immutable
-    Items = this.handlePaginatingData(Items);
+    const {
+      CurrentItems,
+      ItemsAfterFilter,
+      NumberOfCurrentProduct,
+    } = this.handlePaginatingData(Items, activeTab);
+    // eslint-disable-next-line prefer-const
+    const TotalDisplayItems = ItemsAfterFilter.length;
+    console.log(NumberOfCurrentProduct);
+    const TotalCurrentItems = CurrentItems.length;
+    let PageRange = Math.ceil(TotalDisplayItems / TotalCurrentItems);
+    // eslint-disable-next-line no-unused-expressions
+    PageRange < 3 ? PageRange : PageRange = 3;
+    // window.onresize = this.resize.bind(this);
     return (
       <Container>
         <SweetAlert
@@ -158,7 +204,7 @@ export default class ListItems extends React.Component {
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '1' })}
-              onClick={() => { this.toggle('1'); }}
+              onClick={() => { this.toggleNav('1'); }}
             >
               Logo
                         </NavLink>
@@ -166,7 +212,7 @@ export default class ListItems extends React.Component {
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '2' })}
-              onClick={() => { this.toggle('2'); }}
+              onClick={() => { this.toggleNav('2'); }}
             >
               Sản phẩm nổi bật
                         </NavLink>
@@ -174,7 +220,7 @@ export default class ListItems extends React.Component {
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '3' })}
-              onClick={() => { this.toggle('3'); }}
+              onClick={() => { this.toggleNav('3'); }}
             >
               Thức uống
                         </NavLink>
@@ -182,67 +228,87 @@ export default class ListItems extends React.Component {
           <NavItem>
             <NavLink
               className={classnames({ active: this.state.activeTab === '4' })}
-              onClick={() => { this.toggle('4'); }}
+              onClick={() => { this.toggleNav('4'); }}
             >
               Đồ ăn
                         </NavLink>
           </NavItem>
+          <NavItem>
+            <Dropdown className="z-index-9999 " isOpen={this.state.dropdownOpen} toggle={this.toggleDropdown}>
+                  <DropdownToggle className="btn u-color-transparent nav-links" caret>
+                    Sắp xếp
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem header>Giá</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="low-to-high">Thấp -&gt; Cao</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="high-to-low">Cao -&gt; Thấp</DropdownItem>
+                    <DropdownItem divider />
+                    <DropdownItem header>Ưu đãi</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="discount" disabled>Giảm giá</DropdownItem>
+                    <DropdownItem onClick={ this.onDropdownItemClick } dropdownvalue="voucher" disabled>Voucher</DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+          </NavItem>
         </Nav>
         <TabContent activeTab={this.state.activeTab}>
-          <CartContext>
-            <TabPane tabId="1">
-              <Row >
-                {this.state.Items.length === 0 && 'Loading....'}
-                {
-                  this.state.Items.length !== 0 && Items.map((Item, index) =>
-                    <Product Item={Item} key={Item._id} index={index}
-                      onProductClicked={this.onProductClicked}></Product>)
-                }
-              </Row>
-            </TabPane>
-            <TabPane tabId="2">
+          <TabPane tabId="1">
+            <Row >
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                    <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
+                    onProductClicked={this.onProductClicked} />)
+              }
+            </Row>
+          </TabPane>
+          <TabPane tabId="2">
+            <Row>
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                  <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
+                    onProductClicked={this.onProductClicked} />)
+              }
+            </Row>
+          </TabPane>
+          <TabPane tabId="3">
+            <Row>
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                  <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
+                    onProductClicked={this.onProductClicked} />)
+              }
+            </Row>
+          </TabPane>
+          <TabPane tabId="4">
+            <Row>
+              {this.state.Items.length === 0 && 'Loading....'}
+              {
+                TotalCurrentItems !== 0
+                && CurrentItems.map((Item, index) =>
+                  <Product Item={Item} key={Item._id} index={index} visible={classnames({ 'u-opacity-0': index > NumberOfCurrentProduct - 1 })}
+                    onProductClicked={this.onProductClicked} />)
+              }
+            </Row>
+          </TabPane>
+          <TabPane tabId="5">
               <Row>
-                {this.state.Items.length === 0 && 'Loading....'}
-                {
-                  this.state.Items.length !== 0 && Items.map((Item, index) =>
-                    Item.featured
-                    && <Product Item={Item} key={Item._id} index={index}
-                      onProductClicked={this.onProductClicked} />)
-                }
+
               </Row>
             </TabPane>
-            <TabPane tabId="3">
-              <Row>
-                {this.state.Items.length === 0 && 'Loading....'}
-                {
-                  this.state.Items.length !== 0 && Items.map((Item, index) =>
-                    Item.type === PRODUCTTYPE.get(2)
-                    && <Product Item={Item} key={Item._id} index={index}
-                      onProductClicked={this.onProductClicked} />)
-                }
-              </Row>
-            </TabPane>
-            <TabPane tabId="4">
-              <Row>
-                {this.state.Items.length === 0 && 'Loading....'}
-                {
-                  this.state.Items.length !== 0 && Items.map((Item, index) =>
-                    Item.type === PRODUCTTYPE.get(1)
-                    && <Product Item={Item} key={Item._id} index={index}
-                      onProductClicked={this.onProductClicked} />)
-                }
-              </Row>
-            </TabPane>
-          </CartContext>
           <Pagination
-                activePage={this.state.activePage}
-                itemsCountPerPage={Items.length}
-                totalItemsCount={TotalItems}
-                pageRangeDisplayed={3}
-                onChange={this.handlePageChange}
-                itemClass="page-item"
-                linkClass="page-link"
-              />
+            activePage={this.state.activePage}
+            itemsCountPerPage={Items.length}
+            totalItemsCount={TotalItems}
+            pageRangeDisplayed={3}
+            onChange={this.handlePageChange}
+            itemClass="page-item"
+            linkClass="page-link"
+          />
         </TabContent>
       </Container>
     );

@@ -1,4 +1,5 @@
 /* eslint-disable linebreak-style */
+
 import React from 'react';
 import Axios from 'axios';
 import PropTypes from 'prop-types';
@@ -9,13 +10,14 @@ export default class AuthProvider extends React.Component {
   constructor(props) {
     super(props);
     let isLogedIn = true;
-    const token = localStorage.getItem('token');
+    let token = localStorage.getItem('token');
     if (!token) {
       isLogedIn = false;
     }
 
     this.state = {
       user: undefined,
+      token,
       isLogedIn,
       accountnameErr: undefined,
       passwordErr: undefined,
@@ -25,6 +27,20 @@ export default class AuthProvider extends React.Component {
     this.logout = this.logout.bind(this);
     this.showValidationErr = this.showValidationErr.bind(this);
     this.onKeySubmit = this.onKeySubmit.bind(this);
+  }
+
+  componentDidMount() {
+    Axios.get('/api/users', {
+            headers: {
+              authorization: this.state.token,
+            },
+          })
+            .then(response => {
+              this.setState({
+                user: response.data.user,
+                isLogedIn: true,
+              })
+            })
   }
 
   logout() {
@@ -57,20 +73,22 @@ export default class AuthProvider extends React.Component {
     } else if (!item.password) {
       this.showValidationErr(undefined, 'this field much be required!');
     } else {
-      Axios.post('http://localhost:5000/auth/login', item)
+      Axios.post('/auth/login', item)
         .then((res) => {
           localStorage.setItem('token', res.data.token);
-          Axios.get('http://localhost:5000/api/users', {
+          Axios.get('/api/users', {
             headers: {
               authorization: res.data.token,
             },
           })
-            .then(response => this.setState({
-              user: response.data,
-              isLogedIn: true,
-            }));
-        })
-        .catch(err => this.showValidationErr(err.response.data.error.wrongAccount, ''));
+            .then(response => {
+              this.setState({
+                user: response.data.user,
+                isLogedIn: true,
+              })
+            })
+          })
+          .catch(err => this.showValidationErr(err.response.data.error.wrongAccount, ''));
     }
   }
 
