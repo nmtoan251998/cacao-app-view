@@ -1,5 +1,8 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable import/named */
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable import/no-named-as-default-member  */
+
 import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
