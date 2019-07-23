@@ -1,9 +1,11 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable import/named */
+/* eslint-disable react/prop-types */
+/* eslint-disable eol-last */
 
 import React from 'react';
 import {
-  Col, Card, CardImg
+  Col, Card, CardImg,
 } from 'reactstrap';
 
 import { AppContext } from '../contexts/CartContext';

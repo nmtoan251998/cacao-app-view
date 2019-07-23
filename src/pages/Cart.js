@@ -4,6 +4,7 @@
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable eol-last */
 /* eslint-disable import/named */
+
 /* eslint-disable indent */
 /* eslint-disable  arrow-body-style */
 
@@ -20,34 +21,31 @@ export default function Cart() {
             <Container>
                 <AppContext.Consumer>
                     {({ CartItems }) => {
-                        if(CartItems.length === 0) {
+                        if (CartItems.length === 0) {
                             return (
                                 <h3 className="text-center p-4">Bạn không có sản phẩm nào trong giỏ hàng!</h3>
-                            )
-                        } else {
-                            return (
+                            );
+                        }
+                        return (
                                 <div>
                                     <div className="Cart-box">
                                         <h5>Giỏ hàng của bạn:</h5>
-                                        <AppContext.Consumer>
-                                            {({ CartItems }) => CartItems.map((item, index) => {
-                                                return <ProductCart key={index} Item={item}/>;
-                                            })}
-                                        </AppContext.Consumer>
+                                        {CartItems.map((item, index) => {
+                                            return <ProductCart key={index} Item={item}/>;
+                                        })}
                                     </div>
                                     <div className="d-flex flex-column align-items-center p-4">
                                         <h5>Có thể bạn quan tâm:</h5>
                                         <div className="Related-products">
                                             <AppContext.Consumer>
                                                 {({ Related }) => Related.map((item, index) => {
-                                                    return <RelatedCard key={index} Item={item}/>
+                                                    return <RelatedCard key={index} Item={item}/>;
                                                 })}
                                             </AppContext.Consumer>
                                         </div>
                                     </div>
                                 </div>
-                            )
-                        }
+                            );
                     }}
                 </AppContext.Consumer>
             </Container>
