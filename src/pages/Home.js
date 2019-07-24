@@ -4,30 +4,33 @@
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable eol-last */
 /* eslint-disable no-trailing-spaces */
+/* eslint-disable prefer-destructuring */
+/* eslint-disable max-len */
+
 import React, { Component } from 'react';
 import Axios from 'axios';
-import { Container, Row } from 'reactstrap'
+import { Container, Row } from 'reactstrap';
 
-import Product from '../components/Product'
+import Product from '../components/Product';
 
 export default class Home extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      featuredProduct: []
+      featuredProduct: [],
     };
   }
 
   componentDidMount() {
     Axios.get('/api/products/all')
-    .then((res) => {
-      const products = res.data.products;
-      const featuredProduct = products.filter(item => item.feature === true);
-      this.setState({
-        featuredProduct: featuredProduct.slice(0, 6)
-      })
-    }).catch(err => console.error(err));
+      .then((res) => {
+        const products = res.data.products;
+        const featuredProduct = products.filter(item => item.feature === true);
+        this.setState({
+          featuredProduct: featuredProduct.slice(0, 6),
+        });
+      });
   }
 
   render() {    
@@ -43,4 +46,3 @@ export default class Home extends Component {
     );
   }
 }
-

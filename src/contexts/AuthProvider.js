@@ -1,4 +1,5 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable prefer-const */
 
 import React from 'react';
 import Axios from 'axios';
@@ -31,16 +32,16 @@ export default class AuthProvider extends React.Component {
 
   componentDidMount() {
     Axios.get('/api/users', {
-            headers: {
-              authorization: this.state.token,
-            },
-          })
-            .then(response => {
-              this.setState({
-                user: response.data.user,
-                isLogedIn: true,
-              })
-            })
+      headers: {
+        authorization: this.state.token,
+      },
+    })
+      .then((response) => {
+        this.setState({
+          user: response.data.user,
+          isLogedIn: true,
+        });
+      });
   }
 
   logout() {
@@ -81,14 +82,14 @@ export default class AuthProvider extends React.Component {
               authorization: res.data.token,
             },
           })
-            .then(response => {
+            .then((response) => {
               this.setState({
                 user: response.data.user,
                 isLogedIn: true,
-              })
-            })
-          })
-          .catch(err => this.showValidationErr(err.response.data.error.wrongAccount, ''));
+              });
+            });
+        })
+        .catch(err => this.showValidationErr(err.response.data.error.wrongAccount, ''));
     }
   }
 

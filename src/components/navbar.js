@@ -1,6 +1,10 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable consistent-return */
 /* eslint-disable import/named */
+/* eslint-disable no-trailing-spaces */
+/* eslint-disable consistent-return */
+/* eslint-disable arrow-body-style */
+/* eslint-disable arrow-parens */
 
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
