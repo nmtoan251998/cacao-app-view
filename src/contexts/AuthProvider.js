@@ -1,4 +1,5 @@
 /* eslint-disable linebreak-style */
+/* eslint-disable prefer-const */
 
 import React from 'react';
 import Axios from 'axios';
