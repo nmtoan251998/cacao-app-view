@@ -2,6 +2,7 @@
 /* eslint-disable no-trailing-spaces */
 /* eslint-disable arrow-body-style */
 /* eslint-disable eol-last */
+
 import React from 'react';
 import { Container, Row } from 'reactstrap';
 

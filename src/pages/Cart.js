@@ -4,7 +4,6 @@
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable eol-last */
 /* eslint-disable import/named */
-
 /* eslint-disable indent */
 /* eslint-disable  arrow-body-style */
 
