@@ -41,16 +41,17 @@ export class ProductProvider extends Component {
 
   render() {
     return (
-            <ProductContext.Provider value = {{
-              SearchProducts: this.state.SearchProducts,
-              onChange: this.onChange,
-            }}>
-                { this.props.children }
-            </ProductContext.Provider>
+      <ProductContext.Provider value = {{
+        SearchProducts: this.state.SearchProducts,
+        onChange: this.onChange,
+      }}>
+        { this.props.children }
+      </ProductContext.Provider>
     );
   }
 }
+
 ProductProvider.propTypes = {
-  onChange: PropTypes.func,
+  SearchProducts: PropTypes.array,
   children: PropTypes.array,
 };

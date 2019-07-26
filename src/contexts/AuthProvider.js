@@ -11,7 +11,7 @@ export default class AuthProvider extends React.Component {
   constructor(props) {
     super(props);
     let isLogedIn = true;
-    let token = localStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (!token) {
       isLogedIn = false;
     }

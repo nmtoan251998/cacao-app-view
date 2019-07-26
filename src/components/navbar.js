@@ -56,7 +56,9 @@ class NavComponent extends Component {
                   <AuthContext.Consumer>
                     {({ user }) => {
                       if (user !== undefined) {
-                        return <Link className="p-1 Auth-link" to="#">{user.username}</Link>;
+                        return ( 
+                          <Link className="p-1 Auth-link" to="#">{user.username}</Link>
+                        );
                       }
                     }}
                   </AuthContext.Consumer>
@@ -79,7 +81,8 @@ class NavComponent extends Component {
                           type="search"
                           placeholder="Search"
                           aria-label="Search"
-                          onChange = { event => onChange(event) }/>}
+                          onChange = {(event) => onChange(event)}/>
+                        }
                       </ProductContext.Consumer>
                       <Link to="/search" className="btn btn-danger my-2 my-sm-0" >
                         Search

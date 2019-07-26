@@ -3,9 +3,9 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable implicit-arrow-linebreak */
 /* eslint-disable eol-last */
-/* eslint-disable no-trailing-spaces */
 /* eslint-disable prefer-destructuring */
-/* eslint-disable max-len */
+/* eslint-disable arrow-body-style */
+/* eslint-disable no-multiple-empty-lines */
 
 import React, { Component } from 'react';
 import Axios from 'axios';
@@ -33,13 +33,17 @@ export default class Home extends Component {
       });
   }
 
-  render() {    
+  render() {
     return (
           <Container>
             <div className="d-flex flex-column align-items-center border-top m-4">
               <h5 className="m-3">Sản phẩm nổi bậc</h5>
               <Row>
-                {this.state.featuredProduct.map((item, index) => <Product key = {index} Item = {item} />)}
+                {this.state.featuredProduct.map((item, index) => {
+                  return (
+                  <Product key = {index} Item = {item} />
+                  );
+                })}
               </Row>
             </div>
           </Container>

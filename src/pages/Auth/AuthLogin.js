@@ -40,7 +40,10 @@ class LoginBox extends Component {
                 </AuthContext.Consumer>
                 <Col sm="10" md="6" lg="4" className="m-auto shadow-lg">
                     <div className="pr-4 pl-4 pb-3">
-                        <div className="Box-title p-3 text-muted">Login</div>
+                        <div>
+                          <div className="Box-title p-3 text-muted w-100">Login</div>
+                          <Button className="btn w-100 Fb-button">Facebook</Button>
+                        </div>
                         <Form>
                             <FormGroup>
                                 <Label htmlFor="accountname">Accountname</Label>

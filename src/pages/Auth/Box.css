@@ -2,7 +2,19 @@
     text-align: center;
     font-size: 1.8rem;
     border-bottom: 2px solid #eda8bb;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+}
+
+.Fb-button {
+    background-color: white;
+    border: 2px solid #eda8bb;
+    color: #dd7a96
+}
+
+.Fb-button:hover {
+    background: #dd7a96;
+    color: white;
+    border: 2px solid white;
 }
 
 .pink-button {
