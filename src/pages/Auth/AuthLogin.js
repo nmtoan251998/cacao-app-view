@@ -5,6 +5,7 @@ import {
 } from 'reactstrap';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import Axios from 'axios';
 
 import './Box.css';
 import AuthContext from '../../contexts/AuthContext';
@@ -30,6 +31,10 @@ class LoginBox extends Component {
     this.setState({ password: e.target.value });
   }
 
+  loginFb() {
+    Axios.get('/auth/facebook/')
+  }
+
   render() {
     return (
             <Container className="mt-3">
@@ -42,7 +47,7 @@ class LoginBox extends Component {
                     <div className="pr-4 pl-4 pb-3">
                         <div>
                           <div className="Box-title p-3 text-muted w-100">Login</div>
-                          <Button className="btn w-100 Fb-button">Facebook</Button>
+                          <Button onClick={this.loginFb.bind(this)} className="btn w-100 Fb-button">Facebook</Button>
                         </div>
                         <Form>
                             <FormGroup>
